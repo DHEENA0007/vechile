@@ -25,8 +25,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _showPassword = false;
 
   final _roleData = {
-    'user': {'label': 'Vehicle Owner', 'icon': Icons.directions_car_rounded},
-    'owner': {'label': 'Service Center', 'icon': Icons.store_rounded},
+    'user': {'label': 'Vehicle Owner', 'icon': Icons.person_rounded},
+    'owner': {'label': 'Service Center', 'icon': Icons.business_rounded},
   };
 
   @override
@@ -74,183 +74,97 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final auth = context.watch<AuthProvider>();
 
     return Scaffold(
+      backgroundColor: AppTheme.bgSurface,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppTheme.bgCard.withValues(alpha: 0.6),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppTheme.textMuted.withValues(alpha: 0.15),
-            ),
-          ),
-          child: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_rounded,
-              color: AppTheme.textPrimary,
-              size: 18,
-            ),
-            onPressed: () => Navigator.pop(context),
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Stack(
         children: [
-          // Background gradient
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppTheme.bgDark, AppTheme.bgCardLight],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-          // Ambient glow
+          // Background Glows
           Positioned(
-            top: -80,
-            left: -80,
+            top: -50,
+            left: -50,
             child: Container(
-              width: 280,
-              height: 280,
+              width: 250,
+              height: 250,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppTheme.primary.withValues(alpha: 0.12),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primary.withValues(alpha: 0.1),
-                    blurRadius: 100,
-                  ),
-                ],
+                color: AppTheme.primary.withValues(alpha: 0.04),
               ),
             ),
-          ).animate().fadeIn(duration: 800.ms),
-          Positioned(
-            bottom: -60,
-            right: -60,
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.accent.withValues(alpha: 0.08),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.accent.withValues(alpha: 0.08),
-                    blurRadius: 80,
-                  ),
-                ],
-              ),
-            ),
-          ).animate().fadeIn(duration: 800.ms),
+          ).animate().fadeIn(duration: 1.seconds),
 
           SafeArea(
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header
-                    const Text(
+                    Text(
                       'Create\nAccount',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w900,
-                        color: AppTheme.textPrimary,
-                        height: 1.1,
-                        letterSpacing: -1,
-                      ),
-                    ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.15),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Join our vehicle service network',
-                      style: TextStyle(
-                        color: AppTheme.textSecondary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ).animate().fadeIn(delay: 150.ms).slideX(begin: -0.1),
-                    const SizedBox(height: 32),
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                            fontSize: 48,
+                            height: 1,
+                          ),
+                    ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.1),
 
-                    // Role selection
-                    const Text(
-                      'I am a...',
+                    const SizedBox(height: 12),
+
+                    Text(
+                      'Join GearUp network',
                       style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppTheme.textSecondary,
+                        fontSize: 16,
+                        color: AppTheme.textMuted,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
                       ),
-                    ).animate().fadeIn(delay: 200.ms),
-                    const SizedBox(height: 16),
+                    ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
+
+                    const SizedBox(height: 32),
+
+                    // Role Selection
                     Row(
                       children: _roleData.entries.map((entry) {
                         final isSelected = _selectedRole == entry.key;
                         return Expanded(
                           child: GestureDetector(
-                            onTap: () =>
-                                setState(() => _selectedRole = entry.key),
+                            onTap: () => setState(() => _selectedRole = entry.key),
                             child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeOutCubic,
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              duration: 300.ms,
+                              margin: EdgeInsets.only(
+                                right: entry.key == 'user' ? 8 : 0,
+                                left: entry.key == 'owner' ? 8 : 0,
+                              ),
+                              padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                gradient: isSelected
-                                    ? AppTheme.primaryGradient
-                                    : null,
-                                color: isSelected
-                                    ? null
-                                    : AppTheme.bgCardLight.withValues(
-                                        alpha: 0.4,
-                                      ),
-                                borderRadius: BorderRadius.circular(16),
+                                color: isSelected ? AppTheme.primary : Colors.white,
+                                borderRadius: AppTheme.radiusMedium,
                                 border: Border.all(
-                                  color: isSelected
-                                      ? Colors.transparent
-                                      : AppTheme.textPrimary.withValues(
-                                          alpha: 0.05,
-                                        ),
+                                  color: isSelected ? AppTheme.primary : const Color(0xFFE2E8F0),
+                                  width: 1.5,
                                 ),
-                                boxShadow: isSelected
-                                    ? [
-                                        BoxShadow(
-                                          color: AppTheme.primary.withValues(
-                                            alpha: 0.3,
-                                          ),
-                                          blurRadius: 12,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ]
-                                    : null,
+                                boxShadow: isSelected ? AppTheme.glowShadow(AppTheme.primary) : AppTheme.softShadow,
                               ),
                               child: Column(
                                 children: [
                                   Icon(
                                     entry.value['icon'] as IconData,
-                                    color: isSelected
-                                        ? AppTheme.textPrimary
-                                        : AppTheme.textMuted,
-                                    size: 24,
+                                    color: isSelected ? Colors.white : AppTheme.textMuted,
+                                    size: 32,
                                   ),
-                                  const SizedBox(height: 6),
+                                  const SizedBox(height: 12),
                                   Text(
                                     entry.value['label'] as String,
-                                    textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w900
-                                          : FontWeight.w600,
-                                      color: isSelected
-                                          ? AppTheme.textPrimary
-                                          : AppTheme.textSecondary,
+                                      color: isSelected ? Colors.white : AppTheme.textSecondary,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ],
@@ -259,10 +173,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         );
                       }).toList(),
-                    ).animate().fadeIn(delay: 250.ms).slideY(begin: 0.1),
+                    ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2),
+
                     const SizedBox(height: 32),
 
-                    // Form fields inside GlassCard
+                    // Registration Form
                     GlassCard(
                       padding: const EdgeInsets.all(24),
                       child: Column(
@@ -272,147 +187,114 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Expanded(
                                 child: TextFormField(
                                   controller: _firstNameCtrl,
-                                  decoration: const InputDecoration(
-                                    labelText: 'First Name',
-                                    prefixIcon: Icon(
-                                      Icons.person_rounded,
-                                      color: AppTheme.textMuted,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    color: AppTheme.textPrimary,
-                                  ),
-                                  validator: (v) =>
-                                      v?.isEmpty == true ? 'Required' : null,
+                                  decoration: const InputDecoration(labelText: 'First Name'),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
+                                  validator: (v) => v?.isEmpty == true ? 'Required' : null,
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: TextFormField(
                                   controller: _lastNameCtrl,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Last Name',
-                                  ),
-                                  style: const TextStyle(
-                                    color: AppTheme.textPrimary,
-                                  ),
-                                  validator: (v) =>
-                                      v?.isEmpty == true ? 'Required' : null,
+                                  decoration: const InputDecoration(labelText: 'Last Name'),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
+                                  validator: (v) => v?.isEmpty == true ? 'Required' : null,
                                 ),
                               ),
                             ],
-                          ),
+                          ).animate().fadeIn(delay: 500.ms),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _usernameCtrl,
                             decoration: const InputDecoration(
                               labelText: 'Username',
-                              prefixIcon: Icon(
-                                Icons.alternate_email_rounded,
-                                color: AppTheme.textMuted,
-                              ),
+                              prefixIcon: Icon(Icons.alternate_email_rounded),
                             ),
-                            style: const TextStyle(color: AppTheme.textPrimary),
-                            validator: (v) =>
-                                v?.isEmpty == true ? 'Required' : null,
-                          ),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                          ).animate().fadeIn(delay: 600.ms),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _emailCtrl,
                             keyboardType: TextInputType.emailAddress,
                             decoration: const InputDecoration(
-                              labelText: 'Email',
-                              prefixIcon: Icon(
-                                Icons.email_rounded,
-                                color: AppTheme.textMuted,
-                              ),
+                              labelText: 'Email Address',
+                              prefixIcon: Icon(Icons.email_outlined),
                             ),
-                            style: const TextStyle(color: AppTheme.textPrimary),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                             validator: (v) {
                               if (v?.isEmpty == true) return 'Required';
                               if (!v!.contains('@')) return 'Invalid email';
                               return null;
                             },
-                          ),
+                          ).animate().fadeIn(delay: 700.ms),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _phoneCtrl,
                             keyboardType: TextInputType.phone,
                             decoration: const InputDecoration(
                               labelText: 'Phone Number',
-                              prefixIcon: Icon(
-                                Icons.phone_rounded,
-                                color: AppTheme.textMuted,
-                              ),
+                              prefixIcon: Icon(Icons.phone_iphone_rounded),
                             ),
-                            style: const TextStyle(color: AppTheme.textPrimary),
-                            validator: (v) =>
-                                v?.isEmpty == true ? 'Required' : null,
-                          ),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                          ).animate().fadeIn(delay: 800.ms),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordCtrl,
                             obscureText: !_showPassword,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              prefixIcon: const Icon(
-                                Icons.lock_rounded,
-                                color: AppTheme.textMuted,
-                              ),
+                              prefixIcon: const Icon(Icons.lock_open_rounded),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _showPassword
-                                      ? Icons.visibility_off_rounded
-                                      : Icons.visibility_rounded,
+                                  _showPassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
                                   color: AppTheme.textMuted,
                                 ),
-                                onPressed: () => setState(
-                                  () => _showPassword = !_showPassword,
-                                ),
+                                onPressed: () => setState(() => _showPassword = !_showPassword),
                               ),
                             ),
-                            style: const TextStyle(color: AppTheme.textPrimary),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                             validator: (v) {
                               if (v?.isEmpty == true) return 'Required';
                               if (v!.length < 6) return 'Min 6 characters';
                               return null;
                             },
-                          ),
+                          ).animate().fadeIn(delay: 900.ms),
                         ],
                       ),
-                    ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.15),
+                    ),
+
                     const SizedBox(height: 32),
 
                     GradientButton(
-                          text: 'Create Account',
-                          icon: Icons.person_add_rounded,
-                          isLoading: auth.isLoading,
-                          onPressed: _register,
-                        )
-                        .animate()
-                        .fadeIn(delay: 400.ms)
-                        .scale(begin: const Offset(0.9, 0.9)),
-                    const SizedBox(height: 24),
+                      text: 'Create Account',
+                      icon: Icons.person_add_rounded,
+                      isLoading: auth.isLoading,
+                      onPressed: _register,
+                    ).animate().fadeIn(delay: 1.seconds).scale(),
+
+                    const SizedBox(height: 32),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
                           'Already have an account? ',
-                          style: TextStyle(color: AppTheme.textSecondary),
+                          style: TextStyle(color: AppTheme.textSecondary, fontWeight: FontWeight.w500),
                         ),
                         GestureDetector(
                           onTap: () => Navigator.pop(context),
                           child: const Text(
                             'Sign In',
                             style: TextStyle(
-                              color: AppTheme.accent,
-                              fontWeight: FontWeight.w900,
+                              color: AppTheme.primary,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
                       ],
-                    ).animate().fadeIn(delay: 500.ms),
+                    ).animate().fadeIn(delay: 1100.ms),
                   ],
                 ),
               ),

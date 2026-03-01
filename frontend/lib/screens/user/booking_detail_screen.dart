@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../services/payment_service.dart';
@@ -41,153 +42,130 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'Booking Details',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+        title: Text(
+          'Booking Detail',
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.5,
+            color: AppTheme.textPrimary,
+          ),
         ),
-        backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         centerTitle: false,
+        leading: const BackButton(color: AppTheme.textPrimary),
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
             child: Container(color: Colors.transparent),
           ),
         ),
       ),
       body: Stack(
         children: [
-          // Background Glow
-          Positioned(
-            top: 200,
-            right: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.primaryDark.withValues(alpha: 0.15),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryDark.withValues(alpha: 0.1),
-                    blurRadius: 100,
-                  ),
-                ],
-              ),
-            ),
-          ).animate().fadeIn(duration: 800.ms),
-          Positioned(
-            bottom: -50,
-            left: -50,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.accent.withValues(alpha: 0.1),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.accent.withValues(alpha: 0.1),
-                    blurRadius: 100,
-                  ),
-                ],
-              ),
-            ),
-          ).animate().fadeIn(duration: 800.ms),
-
+          Container(color: const Color(0xFFF8FAFC)),
           SafeArea(
             child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(color: AppTheme.accent),
-                  )
-                : _booking == null
                 ? Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
-                          Icons.error_outline_rounded,
-                          size: 64,
-                          color: AppTheme.error,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Booking not found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppTheme.textPrimary,
-                            fontWeight: FontWeight.bold,
+                        const CircularProgressIndicator(color: AppTheme.primary, strokeWidth: 2),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Loading Details...',
+                          style: GoogleFonts.outfit(
+                            color: AppTheme.primary,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
-                    ).animate().fadeIn(),
+                    ),
                   )
-                : RefreshIndicator(
-                    onRefresh: _loadBooking,
-                    color: AppTheme.accent,
-                    backgroundColor: AppTheme.bgCard,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(
-                        parent: BouncingScrollPhysics(),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                : _booking == null
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.error_outline_rounded, size: 64, color: AppTheme.primary),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Booking not found',
+                              style: GoogleFonts.outfit(
+                                fontSize: 18,
+                                color: AppTheme.textPrimary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ).animate().fadeIn(),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: _loadBooking,
+                        color: AppTheme.accent,
+                        backgroundColor: AppTheme.bgCard,
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
                           // Booking header
-                          GlassCard(
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: AppTheme.radiusMedium,
+                              boxShadow: AppTheme.softShadow,
+                            ),
                             padding: const EdgeInsets.all(24),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: AppTheme.accent.withValues(
-                                          alpha: 0.15,
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'BOOKING #${_booking!['booking_number'] ?? ''}',
+                                          style: GoogleFonts.outfit(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w800,
+                                            color: AppTheme.primary,
+                                            letterSpacing: 1.5,
+                                          ),
                                         ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Text(
-                                        _booking!['booking_number'] ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w900,
-                                          color: AppTheme.accent,
-                                          letterSpacing: 1,
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          _booking!['booking_date'] ?? '',
+                                          style: GoogleFonts.outfit(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w900,
+                                            color: AppTheme.textPrimary,
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                    StatusBadge(
-                                      status: _booking!['status'] ?? '',
-                                    ),
+                                    StatusBadge(status: _booking!['status'] ?? ''),
                                   ],
                                 ),
-                                const SizedBox(height: 20),
-                                Container(
-                                  height: 1,
-                                  color: AppTheme.textPrimary.withValues(
-                                    alpha: 0.05,
-                                  ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  child: Divider(color: Color(0xFFF1F5F9)),
                                 ),
-                                const SizedBox(height: 20),
                                 _detailRow(
                                   Icons.event_rounded,
                                   'Date',
                                   _booking!['booking_date'] ?? '',
                                 ),
                                 _detailRow(
-                                  Icons.storefront_rounded,
+                                  Icons.store_rounded,
                                   'Service Center',
-                                  _booking!['service_center_details']?['name'] ??
-                                      '',
+                                  _booking!['service_center_details']?['name'] ?? '',
                                 ),
                                 _detailRow(
                                   Icons.directions_car_rounded,
@@ -197,70 +175,66 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                                 if (_booking!['mechanic_details'] != null)
                                   _detailRow(
                                     Icons.engineering_rounded,
-                                    'Mechanic',
-                                    _booking!['mechanic_details']?['user_details']?['full_name'] ??
-                                        '',
+                                    'Service Expert',
+                                    _booking!['mechanic_details']?['user_details']?['full_name'] ?? '',
                                   ),
                                 if (_booking!['estimated_cost'] != null) ...[
-                                  const SizedBox(height: 12),
-                                  Container(
-                                    height: 1,
-                                    color: AppTheme.textPrimary.withValues(
-                                      alpha: 0.05,
-                                    ),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: Divider(color: Color(0xFFF1F5F9)),
                                   ),
-                                  const SizedBox(height: 12),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        'Estimated Cost',
-                                        style: TextStyle(
+                                      Text(
+                                        'Estimated Total',
+                                        style: GoogleFonts.outfit(
                                           color: AppTheme.textSecondary,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       Text(
                                         '₹${_booking!['estimated_cost']}',
-                                        style: const TextStyle(
-                                          color: AppTheme.textPrimary,
+                                        style: GoogleFonts.outfit(
+                                          color: AppTheme.primary,
                                           fontWeight: FontWeight.w900,
-                                          fontSize: 18,
+                                          fontSize: 22,
                                         ),
                                       ),
                                     ],
                                   ),
                                   if (_booking!['estimate_items'] != null && (_booking!['estimate_items'] as List).isNotEmpty) ...[
-                                    const SizedBox(height: 12),
+                                    const SizedBox(height: 16),
                                     Container(
-                                      padding: const EdgeInsets.all(12),
+                                      padding: const EdgeInsets.all(16),
                                       decoration: BoxDecoration(
-                                        color: AppTheme.bgCardLight.withValues(alpha: 0.2),
+                                        color: const Color(0xFFF8FAFC),
                                         borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: const Color(0xFFF1F5F9)),
                                       ),
                                       child: Column(
                                         children: [
                                           ...(_booking!['estimate_items'] as List).map((item) => Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                            padding: const EdgeInsets.symmetric(vertical: 6),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Expanded(
                                                   child: Text(
-                                                    '${item['description'] ?? ''} (${(item['item_type'] as String).toUpperCase()})',
-                                                    style: const TextStyle(
-                                                      color: AppTheme.textMuted,
-                                                      fontSize: 12,
+                                                    '${item['description'] ?? ''}',
+                                                    style: GoogleFonts.outfit(
+                                                      color: AppTheme.textSecondary,
+                                                      fontSize: 13,
+                                                      fontWeight: FontWeight.w500,
                                                     ),
                                                   ),
                                                 ),
                                                 Text(
                                                   '₹${item['unit_price']}',
-                                                  style: const TextStyle(
+                                                  style: GoogleFonts.outfit(
                                                     color: AppTheme.textPrimary,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 13,
                                                   ),
                                                 ),
                                               ],
@@ -277,218 +251,134 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
 
                           // Status Timeline
                           const SizedBox(height: 32),
-                          const Row(
-                            children: [
-                              Icon(
-                                Icons.timeline_rounded,
-                                color: AppTheme.accent,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                'Status Timeline',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppTheme.textPrimary,
-                                  letterSpacing: -0.5,
-                                ),
-                              ),
-                            ],
-                          ).animate().fadeIn(delay: 100.ms),
+                          _sectionHeader('Tracking Status', Icons.timeline_rounded),
                           const SizedBox(height: 16),
-                          GlassCard(
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: AppTheme.radiusMedium,
+                              boxShadow: AppTheme.softShadow,
+                            ),
                             padding: const EdgeInsets.all(24),
                             child: _buildFullTimeline(),
-                          ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.1),
+                          ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
 
                           // Services
                           if (_booking!['services_list'] != null) ...[
                             const SizedBox(height: 32),
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.build_circle_rounded,
-                                  color: AppTheme.primaryLight,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Services',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppTheme.textPrimary,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                              ],
-                            ).animate().fadeIn(delay: 300.ms),
+                            _sectionHeader('Services Required', Icons.build_circle_rounded),
                             const SizedBox(height: 16),
-                            ...(_booking!['services_list'] as List)
-                                .asMap()
-                                .entries
-                                .map((entry) {
-                                  final s = entry.value;
-                                  return GlassCard(
-                                        margin: const EdgeInsets.only(
-                                          bottom: 12,
+                              ...(_booking!['services_list'] as List).asMap().entries.map((entry) {
+                                final s = entry.value;
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: AppTheme.radiusMedium,
+                                    boxShadow: AppTheme.softShadow,
+                                    border: Border.all(color: AppTheme.primary.withValues(alpha: 0.05)),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        s['name'] ?? '',
+                                        style: GoogleFonts.outfit(
+                                          color: AppTheme.textPrimary,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15,
                                         ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 16,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.primary.withValues(alpha: 0.05),
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              s['name'] ?? '',
-                                              style: const TextStyle(
-                                                color: AppTheme.textPrimary,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 6,
-                                                  ),
-                                              decoration: BoxDecoration(
-                                                color: AppTheme.accent
-                                                    .withValues(alpha: 0.15),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: Text(
-                                                '₹${s['price'] ?? ''}',
-                                                style: const TextStyle(
-                                                  color: AppTheme.accent,
-                                                  fontWeight: FontWeight.w900,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                        child: Text(
+                                          '₹${s['price'] ?? ''}',
+                                          style: GoogleFonts.outfit(
+                                            color: AppTheme.primary,
+                                            fontWeight: FontWeight.w800,
+                                          ),
                                         ),
-                                      )
-                                      .animate()
-                                      .fadeIn(delay: (400 + entry.key * 100).ms)
-                                      .slideX(begin: -0.1);
-                                }),
+                                      ),
+                                    ],
+                                  ),
+                                ).animate().fadeIn(delay: (400 + entry.key * 100).ms).slideX(begin: -0.1);
+                              }),
                           ],
 
                           // Problem Description
-                          if (_booking!['problem_description']?.isNotEmpty ==
-                              true) ...[
+                          if (_booking!['problem_description']?.isNotEmpty == true) ...[
                             const SizedBox(height: 32),
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.description_rounded,
-                                  color: AppTheme.textMuted,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Problem Description',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppTheme.textPrimary,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                              ],
-                            ).animate().fadeIn(delay: 500.ms),
+                            _sectionHeader('Problem Notes', Icons.description_rounded),
                             const SizedBox(height: 16),
-                            GlassCard(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Text(
-                                    _booking!['problem_description'] ?? '',
-                                    style: const TextStyle(
-                                      color: AppTheme.textSecondary,
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                )
-                                .animate()
-                                .fadeIn(delay: 600.ms)
-                                .slideY(begin: 0.1),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: AppTheme.radiusMedium,
+                                boxShadow: AppTheme.softShadow,
+                              ),
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                _booking!['problem_description'] ?? '',
+                                style: GoogleFonts.outfit(
+                                  color: AppTheme.textSecondary,
+                                  height: 1.6,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1),
                           ],
 
                           // Mechanic Notes
-                          if (_booking!['mechanic_notes']?.isNotEmpty ==
-                              true) ...[
+                          if (_booking!['mechanic_notes']?.isNotEmpty == true) ...[
                             const SizedBox(height: 32),
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.note_alt_rounded,
-                                  color: AppTheme.warning,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Mechanic Notes',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppTheme.textPrimary,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                              ],
-                            ).animate().fadeIn(delay: 600.ms),
+                            _sectionHeader('Expert Notes', Icons.note_alt_rounded),
                             const SizedBox(height: 16),
-                            GlassCard(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Text(
-                                    _booking!['mechanic_notes'] ?? '',
-                                    style: const TextStyle(
-                                      color: AppTheme.textSecondary,
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                )
-                                .animate()
-                                .fadeIn(delay: 700.ms)
-                                .slideY(begin: 0.1),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFEF3C7),
+                                borderRadius: AppTheme.radiusMedium,
+                                border: Border.all(color: const Color(0xFFFDE68A)),
+                              ),
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                _booking!['mechanic_notes'] ?? '',
+                                style: GoogleFonts.outfit(
+                                  color: const Color(0xFF92400E),
+                                  height: 1.6,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ).animate().fadeIn(delay: 700.ms).slideY(begin: 0.1),
                           ],
 
                           // Inspection Report
-                          if (_booking!['inspection_report']?.isNotEmpty ==
-                              true) ...[
+                          if (_booking!['inspection_report']?.isNotEmpty == true) ...[
                             const SizedBox(height: 32),
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.assignment_turned_in_rounded,
-                                  color: AppTheme.success,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Inspection Report',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppTheme.textPrimary,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                              ],
-                            ).animate().fadeIn(delay: 700.ms),
+                            _sectionHeader('Inspection Results', Icons.assignment_turned_in_rounded),
                             const SizedBox(height: 16),
-                            GlassCard(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Text(
-                                    _booking!['inspection_report'] ?? '',
-                                    style: const TextStyle(
-                                      color: AppTheme.textSecondary,
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                )
-                                .animate()
-                                .fadeIn(delay: 800.ms)
-                                .slideY(begin: 0.1),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFDCFCE7),
+                                borderRadius: AppTheme.radiusMedium,
+                                border: Border.all(color: const Color(0xFFBBF7D0)),
+                              ),
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                _booking!['inspection_report'] ?? '',
+                                style: GoogleFonts.outfit(
+                                  color: const Color(0xFF166534),
+                                  height: 1.6,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.1),
                           ],
 
                           // Invoice
@@ -502,171 +392,147 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
 
                           // Actions
                           const SizedBox(height: 48),
-                          if (_booking!['status'] == 'pending' ||
-                              _booking!['status'] == 'confirmed')
-                            Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppTheme.error.withValues(
-                                          alpha: 0.3,
-                                        ),
-                                        blurRadius: 12,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: FilledButton.icon(
-                                    icon: const Icon(Icons.cancel_rounded),
-                                    label: const Text(
-                                      'Cancel Booking',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    style: FilledButton.styleFrom(
-                                      backgroundColor: AppTheme.error,
-                                      foregroundColor: AppTheme.textPrimary,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 16,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                    ),
-                                    onPressed: _cancelBooking,
-                                  ),
-                                )
-                                .animate()
-                                .fadeIn(delay: 1000.ms)
-                                .scale(begin: const Offset(0.9, 0.9)),
+                          if (_booking!['status'] == 'pending' || _booking!['status'] == 'confirmed')
+                            SizedBox(
+                              width: double.infinity,
+                              child: OutlinedButton.icon(
+                                icon: const Icon(Icons.close_rounded, size: 20),
+                                label: Text(
+                                  'Cancel Booking',
+                                  style: GoogleFonts.outfit(fontWeight: FontWeight.w700, fontSize: 16),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFFEF4444),
+                                  side: const BorderSide(color: Color(0xFFFEE2E2)),
+                                  padding: const EdgeInsets.symmetric(vertical: 18),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  backgroundColor: const Color(0xFFFEF2F2),
+                                ),
+                                onPressed: _cancelBooking,
+                              ),
+                            ).animate().fadeIn(delay: 1000.ms).scale(begin: const Offset(0.95, 0.95)),
 
                           if (_booking!['status'] == 'inspection_done')
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Action Required', style: TextStyle(color: AppTheme.warning, fontWeight: FontWeight.bold, fontSize: 16)),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: FilledButton.icon(
-                                        icon: const Icon(Icons.check_circle_rounded),
-                                        label: const Text('Accept Estimate', style: TextStyle(fontWeight: FontWeight.bold)),
-                                        style: FilledButton.styleFrom(
-                                          backgroundColor: AppTheme.success,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(vertical: 14),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                        ),
-                                        onPressed: () => _handleEstimate('approve'),
+                                Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFEF3C7),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(color: const Color(0xFFFDE68A)),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.notification_important_rounded, color: Color(0xFF92400E)),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Text(
+                                              'Estimate requires your approval to proceed.',
+                                              style: GoogleFonts.outfit(
+                                                color: const Color(0xFF92400E),
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: OutlinedButton.icon(
-                                        icon: const Icon(Icons.cancel_rounded),
-                                        label: const Text('Reject', style: TextStyle(fontWeight: FontWeight.bold)),
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: AppTheme.error,
-                                          side: const BorderSide(color: AppTheme.error),
-                                          padding: const EdgeInsets.symmetric(vertical: 14),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                        ),
-                                        onPressed: () => _handleEstimate('reject'),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () => _handleEstimate('approve'),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: AppTheme.primary,
+                                                foregroundColor: Colors.white,
+                                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                                elevation: 0,
+                                              ),
+                                              child: Text('Approve', style: GoogleFonts.outfit(fontWeight: FontWeight.w800)),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: OutlinedButton(
+                                              onPressed: () => _handleEstimate('reject'),
+                                              style: OutlinedButton.styleFrom(
+                                                foregroundColor: const Color(0xFF92400E),
+                                                side: const BorderSide(color: Color(0xFFFDE68A)),
+                                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                              ),
+                                              child: Text('Reject', style: GoogleFonts.outfit(fontWeight: FontWeight.w800)),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
                             ).animate().fadeIn(delay: 900.ms).slideY(begin: 0.1),
 
-                          if (_booking!['invoice'] != null &&
-                              _booking!['invoice']?['is_paid'] != true)
+                          if (_booking!['invoice'] != null && _booking!['invoice']?['is_paid'] != true)
                             Column(
                               children: [
-                                SizedBox(
-                                      width: double.infinity,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    gradient: AppTheme.primaryGradient,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppTheme.primary.withValues(alpha: 0.3),
+                                        blurRadius: 15,
+                                        offset: const Offset(0, 8),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: _payWithRazorpay,
+                                      borderRadius: BorderRadius.circular(16),
                                       child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                          gradient: const LinearGradient(
-                                            colors: [
-                                              Color(0xFF6C63FF),
-                                              Color(0xFF4834DF),
-                                            ],
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: const Color(
-                                                0xFF6C63FF,
-                                              ).withValues(alpha: 0.4),
-                                              blurRadius: 12,
-                                              offset: const Offset(0, 6),
+                                        padding: const EdgeInsets.symmetric(vertical: 18),
+                                        alignment: Alignment.center,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(Icons.shield_rounded, color: Colors.white, size: 20),
+                                            const SizedBox(width: 12),
+                                            Text(
+                                              'Secure Checkout',
+                                              style: GoogleFonts.outfit(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 16,
+                                              ),
                                             ),
                                           ],
                                         ),
-                                        child: FilledButton.icon(
-                                          icon: const Icon(
-                                            Icons.payment_rounded,
-                                          ),
-                                          label: const Text(
-                                            'Pay Online (Razorpay)',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          style: FilledButton.styleFrom(
-                                            backgroundColor: Colors.transparent,
-                                            foregroundColor:
-                                                AppTheme.textPrimary,
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 16,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            ),
-                                          ),
-                                          onPressed: _payWithRazorpay,
-                                        ),
                                       ),
-                                    )
-                                    .animate()
-                                    .fadeIn(delay: 1000.ms)
-                                    .scale(begin: const Offset(0.9, 0.9)),
-                                const SizedBox(height: 12),
+                                    ),
+                                  ),
+                                ).animate().fadeIn(delay: 1000.ms).scale(begin: const Offset(0.95, 0.95)),
+                                const SizedBox(height: 16),
                                 SizedBox(
                                   width: double.infinity,
-                                  child: OutlinedButton.icon(
-                                    icon: const Icon(Icons.money_rounded),
-                                    label: const Text(
-                                      'Pay with Cash',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    style: OutlinedButton.styleFrom(
-                                      foregroundColor: AppTheme.textSecondary,
-                                      side: BorderSide(
-                                        color: AppTheme.textMuted.withValues(
-                                          alpha: 0.15,
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 14,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                    ),
+                                  child: TextButton(
                                     onPressed: _payWithCash,
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppTheme.textSecondary,
+                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                    ),
+                                    child: Text(
+                                      'Prefer to pay with cash at center?',
+                                      style: GoogleFonts.outfit(fontWeight: FontWeight.w600, fontSize: 13),
+                                    ),
                                   ),
                                 ).animate().fadeIn(delay: 1100.ms),
                               ],
@@ -685,37 +551,31 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
 
   Widget _detailRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: AppTheme.bgCardLight,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: AppTheme.textMuted, size: 16),
-          ),
-          const SizedBox(width: 12),
+          Icon(icon, color: AppTheme.primary.withValues(alpha: 0.6), size: 18),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     color: AppTheme.textMuted,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.5,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     color: AppTheme.textPrimary,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
                 ),
@@ -725,6 +585,31 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
         ],
       ),
     );
+  }
+
+  Widget _sectionHeader(String title, IconData icon) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppTheme.primary.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: AppTheme.primary, size: 20),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          title,
+          style: GoogleFonts.outfit(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: AppTheme.textPrimary,
+            letterSpacing: -0.5,
+          ),
+        ),
+      ],
+    ).animate().fadeIn().slideX(begin: -0.05);
   }
 
   Widget _buildFullTimeline() {
@@ -868,141 +753,66 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
   }
 
   Widget _buildInvoiceSection(Map<String, dynamic> invoice) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Row(
-          children: [
-            Icon(Icons.receipt_long_rounded, color: AppTheme.warning),
-            SizedBox(width: 8),
-            Text(
-              'Invoice',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.textPrimary,
-                letterSpacing: -0.5,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        GlassCard(
-          padding: const EdgeInsets.all(24),
-          child: Column(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: AppTheme.radiusMedium,
+        boxShadow: AppTheme.softShadow,
+      ),
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _invoiceRow('Invoice #', invoice['invoice_number'] ?? ''),
-              const SizedBox(height: 8),
-              _invoiceRow('Subtotal', '₹${invoice['subtotal'] ?? '0'}'),
-              const SizedBox(height: 4),
-              _invoiceRow(
-                'Tax (${invoice['tax_percentage'] ?? '18'}%)',
-                '₹${invoice['tax_amount'] ?? '0'}',
-              ),
-              if ((invoice['discount'] ?? '0') != '0') ...[
-                const SizedBox(height: 4),
-                _invoiceRow(
-                  'Discount',
-                  '-₹${invoice['discount']}',
-                  valueColor: AppTheme.success,
-                ),
-              ],
-              const SizedBox(height: 16),
-              const Divider(color: AppTheme.textMuted),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Total',
-                    style: TextStyle(
-                      color: AppTheme.textPrimary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    '₹${invoice['total_amount'] ?? '0'}',
-                    style: const TextStyle(
-                      color: AppTheme.accent,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 24,
-                      shadows: [Shadow(color: AppTheme.accent, blurRadius: 10)],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
+              _sectionHeader('Final Invoice', Icons.receipt_long_rounded),
               Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color:
-                      (invoice['is_paid'] == true
-                              ? AppTheme.success
-                              : AppTheme.warning)
-                          .withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color:
-                        (invoice['is_paid'] == true
-                                ? AppTheme.success
-                                : AppTheme.warning)
-                            .withValues(alpha: 0.3),
-                  ),
+                  color: invoice['is_paid'] == true ? const Color(0xFFDCFCE7) : const Color(0xFFFEE2E2),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      invoice['is_paid'] == true
-                          ? Icons.check_circle_rounded
-                          : Icons.pending_actions_rounded,
-                      color: invoice['is_paid'] == true
-                          ? AppTheme.success
-                          : AppTheme.warning,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      invoice['is_paid'] == true
-                          ? 'Payment Completed'
-                          : 'Payment Pending',
-                      style: TextStyle(
-                        color: invoice['is_paid'] == true
-                            ? AppTheme.success
-                            : AppTheme.warning,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  invoice['is_paid'] == true ? 'PAID' : 'UNPAID',
+                  style: GoogleFonts.outfit(
+                    color: invoice['is_paid'] == true ? const Color(0xFF166534) : const Color(0xFFB91C1C),
+                    fontWeight: FontWeight.w900,
+                    fontSize: 11,
+                  ),
                 ),
               ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 24),
+          _invoiceRow('Subtotal', '₹${invoice['total_amount']}', isBold: false),
+          const SizedBox(height: 8),
+          _invoiceRow('Taxes & Fees', '₹${(invoice['total_amount'] * 0.05).toStringAsFixed(0)}', isBold: false),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Divider(color: Color(0xFFF1F5F9))),
+          _invoiceRow('Grand Total', '₹${invoice['total_amount']}', isBold: true, color: AppTheme.primary),
+        ],
+      ),
     );
   }
 
-  Widget _invoiceRow(String label, String value, {Color? valueColor}) {
+  Widget _invoiceRow(String label, String value, {bool isBold = false, Color? color}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: AppTheme.textSecondary,
-            fontWeight: FontWeight.w500,
+          style: GoogleFonts.outfit(
+            color: isBold ? AppTheme.textPrimary : AppTheme.textSecondary,
+            fontWeight: isBold ? FontWeight.w800 : FontWeight.w500,
+            fontSize: isBold ? 16 : 14,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            color: valueColor ?? AppTheme.textPrimary,
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
+          style: GoogleFonts.outfit(
+            color: color ?? (isBold ? AppTheme.textPrimary : AppTheme.textSecondary),
+            fontWeight: isBold ? FontWeight.w900 : FontWeight.w600,
+            fontSize: isBold ? 20 : 15,
           ),
         ),
       ],

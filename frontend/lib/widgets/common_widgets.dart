@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../config/theme.dart';
 
 class GlassCard extends StatelessWidget {
@@ -31,13 +32,13 @@ class GlassCard extends StatelessWidget {
       margin: margin ?? const EdgeInsets.symmetric(vertical: 8),
       padding: padding ?? const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.bgCard,
-        borderRadius: AppTheme.borderRadius,
+        color: Colors.white,
+        borderRadius: AppTheme.radiusMedium,
         border: Border.all(
-          color: AppTheme.textMuted.withValues(alpha: 0.1),
-          width: 1,
+          color: AppTheme.primary.withValues(alpha: 0.05),
+          width: 0.8,
         ),
-        boxShadow: AppTheme.cardShadow,
+        boxShadow: AppTheme.softShadow,
       ),
       child: child,
     );
@@ -150,7 +151,7 @@ class _GradientButtonState extends State<GradientButton>
                       width: 24,
                       height: 24,
                       child: CircularProgressIndicator(
-                        color: AppTheme.textPrimary,
+                        color: Colors.white,
                         strokeWidth: 2.5,
                       ),
                     ),
@@ -161,18 +162,18 @@ class _GradientButtonState extends State<GradientButton>
                       if (widget.icon != null) ...[
                         Icon(
                           widget.icon,
-                          color: AppTheme.textPrimary,
+                          color: Colors.white,
                           size: 20,
                         ),
                         const SizedBox(width: 10),
                       ],
                       Text(
                         widget.text.toUpperCase(),
-                        style: const TextStyle(
-                          color: AppTheme.textPrimary,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.2,
+                        style: GoogleFonts.outfit(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 2,
                         ),
                       ),
                     ],
@@ -192,29 +193,29 @@ class StatusBadge extends StatelessWidget {
   Color get _color {
     switch (status.toLowerCase()) {
       case 'pending':
-        return AppTheme.warning;
+        return const Color(0xFFF59E0B); // Amber 500
       case 'confirmed':
-        return AppTheme.info;
+        return const Color(0xFF6366F1); // Indigo 500
       case 'vehicle_received':
-        return const Color(0xFF00F0FF); // Neon cyan
+        return const Color(0xFF0EA5E9); // Sky 500
       case 'inspection_done':
-        return const Color(0xFF9D00FF); // Neon purple
+        return const Color(0xFF8B5CF6); // Violet 500
       case 'estimate_approved':
-        return const Color(0xFF00FF85); // Neon green
+        return const Color(0xFF10B981); // Emerald 500
       case 'estimate_rejected':
-        return AppTheme.error;
+        return const Color(0xFFEF4444); // Red 500
       case 'in_progress':
-        return AppTheme.primaryLight;
+        return const Color(0xFF6366F1); // Indigo 500
       case 'completed':
-        return AppTheme.success;
+        return const Color(0xFF10B981); // Emerald 500
       case 'ready_pickup':
-        return AppTheme.accent;
+        return const Color(0xFFF59E0B); // Amber 500
       case 'delivered':
-        return AppTheme.success;
+        return const Color(0xFF10B981); // Emerald 500
       case 'cancelled':
-        return AppTheme.error;
+        return const Color(0xFFEF4444); // Red 500
       default:
-        return AppTheme.textMuted;
+        return const Color(0xFF64748B); // Slate 500
     }
   }
 
@@ -229,43 +230,32 @@ class StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: _color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: _color.withValues(alpha: 0.5), width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: _color.withValues(alpha: 0.2),
-            blurRadius: 8,
-            spreadRadius: 0,
-          ),
-        ],
+        color: _color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: _color.withValues(alpha: 0.15), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: _color,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(color: _color, blurRadius: 4, spreadRadius: 1),
-                  ],
-                ),
-              )
-              .animate(onPlay: (controller) => controller.repeat())
-              .shimmer(duration: 1.seconds, color: AppTheme.textPrimary),
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: _color,
+              shape: BoxShape.circle,
+            ),
+          ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+           .scale(duration: 1.seconds, begin: const Offset(0.8, 0.8), end: const Offset(1.2, 1.2)),
           const SizedBox(width: 8),
           Text(
             _label.toUpperCase(),
-            style: TextStyle(
+            style: GoogleFonts.outfit(
               color: _color,
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.5,
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1,
             ),
           ),
         ],
@@ -290,8 +280,14 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
-      padding: const EdgeInsets.all(16),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: AppTheme.radiusMedium,
+        boxShadow: AppTheme.softShadow,
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.05)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -302,46 +298,31 @@ class StatCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      color.withValues(alpha: 0.8),
-                      color.withValues(alpha: 0.4),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: color.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.4),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
                 ),
-                child: Icon(icon, color: AppTheme.textPrimary, size: 24),
+                child: Icon(icon, color: color, size: 22),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Text(
             value,
-            style: TextStyle(
+            style: GoogleFonts.outfit(
               fontSize: 28,
               fontWeight: FontWeight.w900,
               color: AppTheme.textPrimary,
-              shadows: [
-                Shadow(color: color.withValues(alpha: 0.5), blurRadius: 10),
-              ],
+              letterSpacing: -1,
             ),
-          ).animate().slideX(begin: -0.1).fadeIn(),
+          ).animate().fadeIn().slideY(begin: 0.1),
           const SizedBox(height: 4),
           Text(
-            title,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: AppTheme.textSecondary.withValues(alpha: 0.8),
+            title.toUpperCase(),
+            style: GoogleFonts.outfit(
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              color: AppTheme.textMuted,
+              letterSpacing: 1.5,
             ),
           ),
         ],
@@ -473,16 +454,16 @@ class RatingStars extends StatelessWidget {
       children: List.generate(5, (index) {
         if (index < rating.floor()) {
           return Icon(
-            Icons.star,
-            color: AppTheme.warning,
+            Icons.star_rounded,
+            color: const Color(0xFFF59E0B), // Amber 500
             size: size,
           ).animate().scale(delay: (index * 50).ms, duration: 200.ms);
         } else if (index < rating) {
-          return Icon(Icons.star_half, color: AppTheme.warning, size: size);
+          return Icon(Icons.star_half_rounded, color: const Color(0xFFF59E0B), size: size);
         } else {
           return Icon(
-            Icons.star_border,
-            color: AppTheme.textMuted.withValues(alpha: 0.4),
+            Icons.star_rounded,
+            color: AppTheme.primary.withValues(alpha: 0.1),
             size: size,
           );
         }

@@ -333,7 +333,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -417,112 +417,171 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
     final cityCtrl = TextEditingController();
     final stateCtrl = TextEditingController();
     final pincodeCtrl = TextEditingController();
+    TimeOfDay openingTime = const TimeOfDay(hour: 9, minute: 0);
+    TimeOfDay closingTime = const TimeOfDay(hour: 18, minute: 0);
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: AppTheme.bgCard,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
-        ),
-        title: const Row(
-          children: [
-            Icon(Icons.add_business_rounded, color: AppTheme.primary),
-            SizedBox(width: 8),
-            Text(
-              'Create Service Center',
-              style: TextStyle(
-                color: AppTheme.textPrimary,
-                fontWeight: FontWeight.bold,
+      builder: (_) => StatefulBuilder(
+        builder: (ctx, setDlgState) => AlertDialog(
+          backgroundColor: AppTheme.bgCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.add_business_rounded, color: AppTheme.primary),
+              SizedBox(width: 8),
+              Text(
+                'Create Center',
+                style: TextStyle(
+                  color: AppTheme.textPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _dialogField(nameCtrl, 'Center Name'),
+                _dialogField(descCtrl, 'Description', maxLines: 2),
+                _dialogField(phoneCtrl, 'Phone', keyboard: TextInputType.phone),
+                _dialogField(addressCtrl, 'Address'),
+                Row(
+                  children: [
+                    Expanded(child: _dialogField(cityCtrl, 'City')),
+                    const SizedBox(width: 8),
+                    Expanded(child: _dialogField(stateCtrl, 'State')),
+                  ],
+                ),
+                _dialogField(pincodeCtrl, 'Pincode'),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () async {
+                          final picked = await showTimePicker(
+                            context: context,
+                            initialTime: openingTime,
+                          );
+                          if (picked != null) setDlgState(() => openingTime = picked);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppTheme.bgCardLight.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Opens At', style: TextStyle(color: AppTheme.textMuted, fontSize: 10)),
+                              Text(openingTime.format(ctx), style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () async {
+                          final picked = await showTimePicker(
+                            context: context,
+                            initialTime: closingTime,
+                          );
+                          if (picked != null) setDlgState(() => closingTime = picked);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppTheme.bgCardLight.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Closes At', style: TextStyle(color: AppTheme.textMuted, fontSize: 10)),
+                              Text(closingTime.format(ctx), style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel', style: TextStyle(color: AppTheme.textMuted, fontWeight: FontWeight.bold)),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppTheme.primary,
+                foregroundColor: AppTheme.textPrimary,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              onPressed: () async {
+                if (nameCtrl.text.isEmpty || phoneCtrl.text.isEmpty || addressCtrl.text.isEmpty || cityCtrl.text.isEmpty || stateCtrl.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please fill all required fields'), backgroundColor: AppTheme.warning, behavior: SnackBarBehavior.floating),
+                  );
+                  return;
+                }
+
+                final openMin = openingTime.hour * 60 + openingTime.minute;
+                final closeMin = closingTime.hour * 60 + closingTime.minute;
+                if (closeMin <= openMin) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Closing time must be after opening time'), backgroundColor: AppTheme.error, behavior: SnackBarBehavior.floating),
+                  );
+                  return;
+                }
+
+                final openStr = '${openingTime.hour.toString().padLeft(2, '0')}:${openingTime.minute.toString().padLeft(2, '0')}';
+                final closeStr = '${closingTime.hour.toString().padLeft(2, '0')}:${closingTime.minute.toString().padLeft(2, '0')}';
+
+                try {
+                  await ApiService.post(
+                    '/services/owner/centers/',
+                    body: {
+                      'name': nameCtrl.text,
+                      'description': descCtrl.text,
+                      'phone': phoneCtrl.text,
+                      'address': addressCtrl.text,
+                      'city': cityCtrl.text,
+                      'state': stateCtrl.text,
+                      'pincode': pincodeCtrl.text,
+                      'opening_time': openStr,
+                      'closing_time': closeStr,
+                    },
+                  );
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    _loadCenters();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Center created!', style: TextStyle(fontWeight: FontWeight.bold)), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString()), backgroundColor: AppTheme.error, behavior: SnackBarBehavior.floating),
+                    );
+                  }
+                }
+              },
+              child: const Text('Create', style: TextStyle(fontWeight: FontWeight.bold)),
             ),
           ],
         ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _dialogField(nameCtrl, 'Center Name'),
-              _dialogField(descCtrl, 'Description', maxLines: 2),
-              _dialogField(phoneCtrl, 'Phone', keyboard: TextInputType.phone),
-              _dialogField(addressCtrl, 'Address'),
-              Row(
-                children: [
-                  Expanded(child: _dialogField(cityCtrl, 'City')),
-                  const SizedBox(width: 8),
-                  Expanded(child: _dialogField(stateCtrl, 'State')),
-                ],
-              ),
-              _dialogField(pincodeCtrl, 'Pincode'),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(
-                color: AppTheme.textMuted,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: AppTheme.primary,
-              foregroundColor: AppTheme.textPrimary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () async {
-              try {
-                await ApiService.post(
-                  '/services/owner/centers/',
-                  body: {
-                    'name': nameCtrl.text,
-                    'description': descCtrl.text,
-                    'phone': phoneCtrl.text,
-                    'address': addressCtrl.text,
-                    'city': cityCtrl.text,
-                    'state': stateCtrl.text,
-                    'pincode': pincodeCtrl.text,
-                  },
-                );
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  _loadCenters();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Center created!',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      backgroundColor: AppTheme.success,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(e.toString()),
-                      backgroundColor: AppTheme.error,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              }
-            },
-            child: const Text(
-              'Create',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -1497,6 +1556,20 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                 ),
               ),
               onPressed: () async {
+                final startMinutes = startTime.hour * 60 + startTime.minute;
+                final endMinutes = endTime.hour * 60 + endTime.minute;
+
+                if (endMinutes <= startMinutes) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('End time must be after start time'),
+                      backgroundColor: AppTheme.error,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  return;
+                }
+
                 final startStr =
                     '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
                 final endStr =

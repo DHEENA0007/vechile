@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
@@ -44,16 +45,20 @@ class _BookingListScreenState extends State<BookingListScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'My Bookings',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+        title: Text(
+          'My Appointments',
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+            color: AppTheme.textPrimary,
+          ),
         ),
-        backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         centerTitle: false,
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(color: Colors.transparent),
           ),
         ),
@@ -184,31 +189,19 @@ class _BookingListScreenState extends State<BookingListScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             gradient: isSelected ? AppTheme.primaryGradient : null,
-            color: isSelected
-                ? null
-                : AppTheme.bgCardLight.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(20),
+            color: isSelected ? null : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: isSelected ? AppTheme.glowShadow(AppTheme.primary) : AppTheme.softShadow,
             border: Border.all(
-              color: isSelected
-                  ? Colors.transparent
-                  : AppTheme.textPrimary.withValues(alpha: 0.05),
+              color: isSelected ? Colors.transparent : AppTheme.primary.withValues(alpha: 0.05),
             ),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: AppTheme.primary.withValues(alpha: 0.4),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : null,
           ),
           child: Text(
             label,
-            style: TextStyle(
-              color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
-              fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-              letterSpacing: 0.2,
+            style: GoogleFonts.outfit(
+              color: isSelected ? Colors.white : AppTheme.textPrimary,
+              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+              fontSize: 13,
             ),
           ),
         ),
@@ -217,135 +210,119 @@ class _BookingListScreenState extends State<BookingListScreen> {
   }
 
   Widget _buildBookingCard(Map<String, dynamic> booking, int index) {
-    return GlassCard(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(20),
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BookingDetailScreen(bookingId: booking['id']),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: AppTheme.radiusMedium,
+        boxShadow: AppTheme.softShadow,
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.05)),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: AppTheme.radiusMedium,
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BookingDetailScreen(bookingId: booking['id']),
+              ),
+            );
+            _loadBookings();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '#${booking['booking_number'] ?? ''}',
+                      style: GoogleFonts.outfit(
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.primary,
+                        fontSize: 14,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    StatusBadge(status: booking['status'] ?? 'pending'),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(Icons.storefront_rounded, color: AppTheme.primary, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        booking['service_center_name'] ?? '',
+                        style: GoogleFonts.outfit(
+                          color: AppTheme.textPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const SizedBox(width: 44),
+                    Icon(Icons.directions_car_rounded, color: AppTheme.textMuted, size: 16),
+                    const SizedBox(width: 8),
+                    Text(
+                      booking['vehicle_info'] ?? '',
+                      style: GoogleFonts.outfit(
+                        color: AppTheme.textSecondary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Divider(color: Color(0xFFF1F5F9), height: 1),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.event_rounded, color: AppTheme.textMuted, size: 16),
+                    const SizedBox(width: 8),
+                    Text(
+                      booking['booking_date'] ?? '',
+                      style: GoogleFonts.outfit(
+                        color: AppTheme.textSecondary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Spacer(),
+                    if (booking['estimated_cost'] != null)
+                      Text(
+                        '₹${booking['estimated_cost']}',
+                        style: GoogleFonts.outfit(
+                          color: const Color(0xFF6366F1), // Indigo 500
+                          fontWeight: FontWeight.w900,
+                          fontSize: 20,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        );
-        _loadBookings();
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: AppTheme.accent.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  booking['booking_number'] ?? '',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w900,
-                    color: AppTheme.accent,
-                    fontSize: 14,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ),
-              StatusBadge(status: booking['status'] ?? 'pending'),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: AppTheme.bgCardLight,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.storefront_rounded,
-                  color: AppTheme.primaryLight,
-                  size: 18,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  booking['service_center_name'] ?? '',
-                  style: const TextStyle(
-                    color: AppTheme.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: AppTheme.bgCardLight,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.directions_car_rounded,
-                  color: AppTheme.textMuted,
-                  size: 18,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                booking['vehicle_info'] ?? '',
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Container(
-            height: 1,
-            color: AppTheme.textPrimary.withValues(alpha: 0.05),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              const Icon(
-                Icons.event_rounded,
-                color: AppTheme.textMuted,
-                size: 16,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                booking['booking_date'] ?? '',
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              if (booking['estimated_cost'] != null)
-                Text(
-                  '₹${booking['estimated_cost']}',
-                  style: const TextStyle(
-                    color: AppTheme.accent,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 18,
-                  ),
-                ),
-            ],
-          ),
-        ],
+        ),
       ),
     ).animate().fadeIn(delay: (index * 100).ms).slideY(begin: 0.1);
   }

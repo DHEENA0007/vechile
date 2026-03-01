@@ -477,7 +477,24 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () async {
+            onPressed: () async {
+                if (usernameCtrl.text.isEmpty ||
+                    passwordCtrl.text.isEmpty ||
+                    firstNameCtrl.text.isEmpty ||
+                    lastNameCtrl.text.isEmpty ||
+                    phoneCtrl.text.isEmpty ||
+                    emailCtrl.text.isEmpty ||
+                    specCtrl.text.isEmpty ||
+                    expCtrl.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill all fields'),
+                      backgroundColor: AppTheme.warning,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  return;
+                }
                 try {
                   await ApiService.post(
                     '/services/owner/centers/$_activeCenterId/mechanics/',

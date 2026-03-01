@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
@@ -50,18 +51,19 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        backgroundColor: AppTheme.bgDark,
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CircularProgressIndicator(color: AppTheme.accent),
+              const CircularProgressIndicator(color: AppTheme.primary, strokeWidth: 2),
               const SizedBox(height: 24),
-              const Text(
-                'Loading Details...',
-                style: TextStyle(
-                  color: AppTheme.accent,
-                  fontWeight: FontWeight.bold,
+              Text(
+                'Fetching Details...',
+                style: GoogleFonts.outfit(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
                 ),
               ).animate().fadeIn(duration: 800.ms),
             ],
@@ -87,42 +89,27 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
         physics: const BouncingScrollPhysics(),
         slivers: [
           // Header
+          // Header
           SliverAppBar(
             expandedHeight: 280,
             pinned: true,
-            backgroundColor: AppTheme.bgDark,
+            backgroundColor: Colors.white,
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
                 children: [
                   Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [AppTheme.primaryDark, AppTheme.bgDark],
+                        colors: [
+                          AppTheme.primary.withValues(alpha: 0.05),
+                          Colors.white,
+                        ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
                     ),
-                  ),
-                  // Background ambient circle
-                  Positioned(
-                    top: 20,
-                    right: -20,
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppTheme.accent.withValues(alpha: 0.15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.accent.withValues(alpha: 0.2),
-                            blurRadius: 100,
-                          ),
-                        ],
-                      ),
-                    ).animate().fadeIn(duration: 800.ms),
                   ),
                   Center(
                     child: Column(
@@ -130,38 +117,32 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
                       children: [
                         const SizedBox(height: 40),
                         Container(
-                          padding: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             shape: BoxShape.circle,
-                            gradient: AppTheme.primaryGradient,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primary.withValues(alpha: 0.4),
-                                blurRadius: 20,
-                                spreadRadius: 2,
-                              ),
-                            ],
+                            boxShadow: AppTheme.softShadow,
                           ),
-                          child: const Icon(
-                            Icons.car_repair_rounded,
-                            size: 56,
-                            color: AppTheme.textPrimary,
+                          child: Icon(
+                            Icons.store_rounded,
+                            size: 60,
+                            color: AppTheme.primary,
                           ),
-                        ).animate().scale(
-                          delay: 200.ms,
-                          curve: Curves.easeOutBack,
+                        ).animate().scale(curve: Curves.easeOutBack, duration: 600.ms),
+                        const SizedBox(height: 24),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            _center!['name'] ?? '',
+                            style: GoogleFonts.outfit(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w900,
+                              color: AppTheme.textPrimary,
+                              letterSpacing: -0.8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2),
                         ),
-                        const SizedBox(height: 20),
-                        Text(
-                          _center!['name'] ?? '',
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w900,
-                            color: AppTheme.textPrimary,
-                            letterSpacing: -0.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.2),
                       ],
                     ),
                   ),
@@ -177,84 +158,71 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Rating & Reviews
-                  GlassCard(
+                  // Rating & Reviews
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: AppTheme.radiusMedium,
+                      boxShadow: AppTheme.softShadow,
+                    ),
                     padding: const EdgeInsets.all(24),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
+                        Row(
                           children: [
-                            Text(
-                              '${_center!['average_rating'] ?? 0.0}',
-                              style: const TextStyle(
-                                fontSize: 48,
-                                fontWeight: FontWeight.w900,
-                                color: AppTheme.warning,
-                                height: 1.0,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            RatingStars(
-                              rating: (_center!['average_rating'] ?? 0)
-                                  .toDouble(),
-                              size: 16,
-                            ),
-                            const SizedBox(height: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppTheme.bgCardLight,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                '${_center!['total_reviews'] ?? 0} reviews',
-                                style: const TextStyle(
-                                  color: AppTheme.textSecondary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                            Column(
+                              children: [
+                                Text(
+                                  '${_center!['average_rating'] ?? 0.0}',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 44,
+                                    fontWeight: FontWeight.w900,
+                                    color: const Color(0xFFF59E0B),
+                                    height: 1.0,
+                                  ),
                                 ),
+                                const SizedBox(height: 8),
+                                RatingStars(
+                                  rating: (_center!['average_rating'] ?? 0).toDouble(),
+                                  size: 14,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '${_center!['total_reviews'] ?? 0} reviews',
+                                  style: GoogleFonts.outfit(
+                                    color: AppTheme.textMuted,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 24),
+                            Container(width: 1, height: 100, color: const Color(0xFFF1F5F9)),
+                            const SizedBox(width: 24),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _infoRow(Icons.location_on_rounded, _center!['address'] ?? '', AppTheme.primary),
+                                  const SizedBox(height: 12),
+                                  _infoRow(Icons.phone_rounded, _center!['phone'] ?? '', const Color(0xFF0F172A)),
+                                  const SizedBox(height: 12),
+                                  _infoRow(Icons.access_time_filled_rounded, '${_center!['opening_time']} - ${_center!['closing_time']}', const Color(0xFFF59E0B)),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(width: 24),
-                        Container(
-                          width: 1,
-                          height: 100,
-                          color: AppTheme.textMuted.withValues(alpha: 0.15),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Divider(color: Color(0xFFF1F5F9)),
                         ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _infoRow(
-                                Icons.location_on_rounded,
-                                _center!['address'] ?? '',
-                                AppTheme.primaryLight,
-                              ),
-                              const SizedBox(height: 12),
-                              _infoRow(
-                                Icons.phone_rounded,
-                                _center!['phone'] ?? '',
-                                AppTheme.info,
-                              ),
-                              const SizedBox(height: 12),
-                              _infoRow(
-                                Icons.access_time_filled_rounded,
-                                '${_center!['opening_time']} - ${_center!['closing_time']}',
-                                AppTheme.warning,
-                              ),
-                              const SizedBox(height: 12),
-                              _infoRow(
-                                Icons.calendar_month_rounded,
-                                _center!['working_days'] ?? '',
-                                AppTheme.accent,
-                              ),
-                            ],
-                          ),
+                        _infoRow(
+                          Icons.calendar_month_rounded,
+                          'Working Days: ${_center!['working_days'] ?? 'All weekdays'}',
+                          AppTheme.primary,
                         ),
                       ],
                     ),
@@ -267,10 +235,11 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
                     const SizedBox(height: 16),
                     Text(
                       _center!['description'] ?? '',
-                      style: TextStyle(
-                        color: AppTheme.textSecondary.withValues(alpha: 0.9),
+                      style: GoogleFonts.outfit(
+                        color: AppTheme.textSecondary,
                         fontSize: 16,
-                        height: 1.5,
+                        height: 1.6,
+                        fontWeight: FontWeight.w400,
                       ),
                     ).animate().fadeIn(delay: 600.ms),
                   ],
@@ -381,58 +350,40 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
           ),
         ],
       ),
-      bottomSheet:
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            decoration: BoxDecoration(
-              color: AppTheme.bgCard.withValues(alpha: 0.95),
-              border: Border(
-                top: BorderSide(
-                  color: AppTheme.textPrimary.withValues(alpha: 0.05),
-                ),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.5),
-                  blurRadius: 30,
-                  offset: const Offset(0, -10),
-                ),
-              ],
+      bottomSheet: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: const Border(top: BorderSide(color: Color(0xFFF1F5F9))),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
             ),
-            child: SafeArea(
-              child: GradientButton(
-                text: 'Book Appointment',
-                icon: Icons.calendar_today_rounded,
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        BookServiceScreen(center: _center!),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                          return SlideTransition(
-                            position:
-                                Tween<Offset>(
-                                  begin: const Offset(0, 1),
-                                  end: Offset.zero,
-                                ).animate(
-                                  CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeOutExpo,
-                                  ),
-                                ),
-                            child: child,
-                          );
-                        },
-                  ),
-                ),
+          ],
+        ),
+        child: SafeArea(
+          child: GradientButton(
+            text: 'Schedule Appointment',
+            icon: Icons.calendar_today_rounded,
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => BookServiceScreen(center: _center!),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  return SlideTransition(
+                    position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero).animate(
+                      CurvedAnimation(parent: animation, curve: Curves.easeOutExpo),
+                    ),
+                    child: child,
+                  );
+                },
               ),
             ),
-          ).animate().slideY(
-            begin: 1.0,
-            duration: 800.ms,
-            curve: Curves.easeOutExpo,
           ),
+        ),
+      ).animate().slideY(begin: 1.0, duration: 800.ms, curve: Curves.easeOutExpo),
     );
   }
 
@@ -442,17 +393,17 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppTheme.accent.withValues(alpha: 0.15),
+            color: AppTheme.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(icon, color: AppTheme.accent, size: 20),
+          child: Icon(icon, color: AppTheme.primary, size: 20),
         ),
         const SizedBox(width: 12),
         Text(
           title,
-          style: const TextStyle(
+          style: GoogleFonts.outfit(
             fontSize: 22,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w800,
             color: AppTheme.textPrimary,
             letterSpacing: -0.5,
           ),
@@ -465,25 +416,15 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.15),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: color, size: 14),
-        ),
+        Icon(icon, color: color.withValues(alpha: 0.6), size: 16),
         const SizedBox(width: 12),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: AppTheme.textSecondary,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+          child: Text(
+            text,
+            style: GoogleFonts.outfit(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -492,32 +433,24 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
   }
 
   Widget _buildServiceItem(Map<String, dynamic> service) {
-    return GlassCard(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: AppTheme.radiusMedium,
+        boxShadow: AppTheme.softShadow,
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.05)),
+      ),
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppTheme.primary.withValues(alpha: 0.2),
-                  AppTheme.primaryDark.withValues(alpha: 0.1),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: AppTheme.primary.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppTheme.primary.withValues(alpha: 0.3),
-              ),
             ),
-            child: const Icon(
-              Icons.build_rounded,
-              color: AppTheme.primaryLight,
-              size: 24,
-            ),
+            child: Icon(Icons.build_circle_rounded, color: AppTheme.primary, size: 28),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -526,7 +459,7 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
               children: [
                 Text(
                   service['service_type_name'] ?? '',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     fontWeight: FontWeight.w800,
                     fontSize: 16,
                     color: AppTheme.textPrimary,
@@ -536,11 +469,11 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     service['description'] ?? '',
-                    style: TextStyle(
-                      color: AppTheme.textSecondary.withValues(alpha: 0.8),
+                    style: GoogleFonts.outfit(
+                      color: AppTheme.textSecondary,
                       fontSize: 13,
                     ),
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -553,9 +486,9 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
             children: [
               Text(
                 '₹${service['price'] ?? ''}',
-                style: const TextStyle(
+                style: GoogleFonts.outfit(
                   fontWeight: FontWeight.w900,
-                  color: AppTheme.accent,
+                  color: AppTheme.primary,
                   fontSize: 18,
                 ),
               ),
@@ -563,15 +496,15 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppTheme.bgCardLight,
+                  color: const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   '${service['estimated_duration'] ?? ''} mins',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     color: AppTheme.textMuted,
                     fontSize: 11,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -583,8 +516,13 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
   }
 
   Widget _buildReviewCard(Map<String, dynamic> review) {
-    return GlassCard(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: AppTheme.radiusMedium,
+        boxShadow: AppTheme.softShadow,
+      ),
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -595,21 +533,15 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
+                  color: AppTheme.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                    ),
-                  ],
                 ),
                 child: Center(
                   child: Text(
                     (review['user_name'] ?? 'U')[0].toUpperCase(),
-                    style: const TextStyle(
-                      color: AppTheme.textPrimary,
-                      fontWeight: FontWeight.bold,
+                    style: GoogleFonts.outfit(
+                      color: AppTheme.primary,
+                      fontWeight: FontWeight.w800,
                       fontSize: 18,
                     ),
                   ),
@@ -621,18 +553,15 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      review['user_name'] ?? '',
-                      style: const TextStyle(
+                      review['user_name'] ?? 'Anonymous User',
+                      style: GoogleFonts.outfit(
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
                         color: AppTheme.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    RatingStars(
-                      rating: (review['rating'] ?? 0).toDouble(),
-                      size: 14,
-                    ),
+                    const SizedBox(height: 2),
+                    RatingStars(rating: (review['rating'] ?? 0).toDouble(), size: 12),
                   ],
                 ),
               ),
@@ -642,66 +571,39 @@ class _CenterDetailScreenState extends State<CenterDetailScreen> {
             const SizedBox(height: 16),
             Text(
               review['comment'] ?? '',
-              style: const TextStyle(
+              style: GoogleFonts.outfit(
                 color: AppTheme.textSecondary,
-                fontSize: 15,
-                height: 1.4,
+                fontSize: 14,
+                height: 1.5,
               ),
             ),
           ],
           if (review['owner_reply']?.isNotEmpty == true) ...[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Divider(color: AppTheme.textMuted, height: 1),
-            ),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Divider(color: Color(0xFFF1F5F9))),
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.primary.withValues(alpha: 0.1),
+                color: const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppTheme.primary.withValues(alpha: 0.2),
-                ),
+                border: Border.all(color: const Color(0xFFF1F5F9)),
               ),
-              child: Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primary.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.reply_rounded,
-                      color: AppTheme.primaryLight,
-                      size: 14,
-                    ),
+                  Row(
+                    children: [
+                      const Icon(Icons.reply_rounded, color: AppTheme.primary, size: 16),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Owner Response',
+                        style: GoogleFonts.outfit(color: AppTheme.primary, fontWeight: FontWeight.w800, fontSize: 13),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Owner Reply',
-                          style: TextStyle(
-                            color: AppTheme.primaryLight,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          review['owner_reply'] ?? '',
-                          style: const TextStyle(
-                            color: AppTheme.textSecondary,
-                            fontSize: 14,
-                            height: 1.4,
-                          ),
-                        ),
-                      ],
-                    ),
+                  const SizedBox(height: 8),
+                  Text(
+                    review['owner_reply'] ?? '',
+                    style: GoogleFonts.outfit(color: AppTheme.textSecondary, fontSize: 14, height: 1.5),
                   ),
                 ],
               ),

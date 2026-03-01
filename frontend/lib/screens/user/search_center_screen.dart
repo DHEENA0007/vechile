@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
@@ -69,16 +70,20 @@ class _SearchCenterScreenState extends State<SearchCenterScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'Find Service Centers',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+        title: Text(
+          'Find Services',
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+            color: AppTheme.textPrimary,
+          ),
         ),
-        backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         centerTitle: false,
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(color: Colors.transparent),
           ),
         ),
@@ -108,95 +113,44 @@ class _SearchCenterScreenState extends State<SearchCenterScreen> {
           SafeArea(
             child: Column(
               children: [
-                // Search bar
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                   child: Row(
                     children: [
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: AppTheme.bgCardLight.withValues(alpha: 0.5),
-                            borderRadius: AppTheme.borderRadius,
-                            border: Border.all(
-                              color: AppTheme.textPrimary.withValues(
-                                alpha: 0.05,
-                              ),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.2),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
+                            color: Colors.white,
+                            borderRadius: AppTheme.radiusMedium,
+                            boxShadow: AppTheme.softShadow,
+                            border: Border.all(color: AppTheme.primary.withValues(alpha: 0.05)),
                           ),
                           child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
-                              hintText: 'Search by name or city...',
-                              hintStyle: const TextStyle(
-                                color: AppTheme.textMuted,
-                              ),
-                              prefixIcon: const Icon(
-                                Icons.search_rounded,
-                                color: AppTheme.accent,
-                              ),
-                              suffixIcon: _searchController.text.isNotEmpty
-                                  ? IconButton(
-                                      icon: const Icon(
-                                        Icons.clear_rounded,
-                                        color: AppTheme.textMuted,
-                                      ),
-                                      onPressed: () {
-                                        _searchController.clear();
-                                        _searchCenters();
-                                      },
-                                    )
-                                  : null,
+                              hintText: 'Search centers or city...',
+                              prefixIcon: Icon(Icons.search_rounded, color: AppTheme.primary.withValues(alpha: 0.6)),
                               border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                              ),
+                              contentPadding: const EdgeInsets.symmetric(vertical: 16),
                             ),
-                            style: const TextStyle(
-                              color: AppTheme.textPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
                             onSubmitted: (_) => _searchCenters(),
                           ),
                         ),
-                      ).animate().slideX(begin: -0.1),
+                      ),
                       const SizedBox(width: 12),
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: AppTheme.primaryGradient,
-                          borderRadius: AppTheme.borderRadius,
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppTheme.primary.withValues(alpha: 0.4),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: AppTheme.borderRadius,
-                            onTap: _showFilters,
-                            child: const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Icon(
-                                Icons.tune_rounded,
-                                color: AppTheme.textPrimary,
-                              ),
-                            ),
+                      GestureDetector(
+                        onTap: _showFilters,
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            gradient: AppTheme.primaryGradient,
+                            borderRadius: AppTheme.radiusMedium,
+                            boxShadow: AppTheme.glowShadow(AppTheme.primary),
                           ),
+                          child: const Icon(Icons.tune_rounded, color: Colors.white, size: 24),
                         ),
-                      ).animate().scale(delay: 100.ms),
+                      ),
                     ],
                   ),
                 ),
@@ -270,185 +224,153 @@ class _SearchCenterScreenState extends State<SearchCenterScreen> {
   }
 
   Widget _buildCenterCard(Map<String, dynamic> center) {
-    return GlassCard(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      onTap: () => Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              CenterDetailScreen(centerId: center['id']),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-        ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: AppTheme.radiusMedium,
+        boxShadow: AppTheme.softShadow,
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.05)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.store_rounded,
-                  color: AppTheme.textPrimary,
-                  size: 32,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: AppTheme.radiusMedium,
+          onTap: () => Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  CenterDetailScreen(centerId: center['id']),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      center['name'] ?? '',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppTheme.textPrimary,
-                        letterSpacing: -0.2,
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      child: Icon(Icons.store_rounded, color: AppTheme.primary, size: 28),
                     ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        RatingStars(
-                          rating: (center['average_rating'] ?? 0).toDouble(),
-                          size: 16,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '(${center['total_reviews'] ?? 0} reviews)',
-                          style: TextStyle(
-                            color: AppTheme.textSecondary.withValues(
-                              alpha: 0.8,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            center['name'] ?? '',
+                            style: GoogleFonts.outfit(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: AppTheme.textPrimary,
                             ),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              RatingStars(
+                                rating: (center['average_rating'] ?? 0).toDouble(),
+                                size: 14,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                '${center['total_reviews'] ?? 0} reviews',
+                                style: GoogleFonts.outfit(
+                                  color: AppTheme.textMuted,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-              if (center['distance'] != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.accent.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: AppTheme.accent.withValues(alpha: 0.3),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Divider(color: Color(0xFFF1F5F9), height: 1),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.location_on_rounded, color: AppTheme.primary.withValues(alpha: 0.6), size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        '${center['address'] ?? ''}, ${center['city'] ?? ''}',
+                        style: GoogleFonts.outfit(
+                          color: AppTheme.textSecondary,
+                          fontSize: 13,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    '${center['distance']} km',
-                    style: const TextStyle(
-                      color: AppTheme.accent,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
+                    if (center['distance'] != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primary.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          '${center['distance']} km',
+                          style: GoogleFonts.outfit(
+                            color: AppTheme.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Icon(Icons.access_time_filled_rounded, color: Colors.amber.shade700, size: 16),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${center['opening_time'] ?? ''} - ${center['closing_time'] ?? ''}',
+                      style: GoogleFonts.outfit(
+                        color: AppTheme.textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '${center['services_count'] ?? 0} Services',
+                        style: GoogleFonts.outfit(
+                          color: const Color(0xFF6366F1),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-            ],
+              ],
+            ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(color: AppTheme.textMuted, height: 1),
-          ),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: AppTheme.bgCardLight.withValues(alpha: 0.5),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.location_on_rounded,
-                  color: AppTheme.primaryLight,
-                  size: 16,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  '${center['address'] ?? ''}, ${center['city'] ?? ''}',
-                  style: const TextStyle(
-                    color: AppTheme.textSecondary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: AppTheme.bgCardLight.withValues(alpha: 0.5),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.access_time_filled_rounded,
-                  color: AppTheme.warning,
-                  size: 16,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                '${center['opening_time'] ?? ''} - ${center['closing_time'] ?? ''}',
-                style: const TextStyle(
-                  color: AppTheme.textSecondary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: AppTheme.info.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${center['services_count'] ?? 0} services',
-                  style: const TextStyle(
-                    color: AppTheme.info,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

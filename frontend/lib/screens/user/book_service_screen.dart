@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
@@ -48,10 +49,7 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     if (_selectedVehicle == null || _selectedServices.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Please select a vehicle and services',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          content: Text('Please select a vehicle and services'),
           backgroundColor: AppTheme.error,
         ),
       );
@@ -73,15 +71,15 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
       );
 
       if (mounted) {
-        Navigator.pop(context); // Pop book screen
-        Navigator.pop(context); // Pop detail screen
+        Navigator.pop(context);
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
               '🎉 Booking created successfully!',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
             ),
-            backgroundColor: AppTheme.success,
+            backgroundColor: AppTheme.primary,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -108,12 +106,10 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
   List<Map<String, dynamic>> get services =>
       (widget.center['offered_services'] as List?)
-          ?.cast<Map<String, dynamic>>() ??
-      [];
+          ?.cast<Map<String, dynamic>>() ?? [];
 
   List<Map<String, dynamic>> get timeSlots =>
-      (widget.center['time_slots'] as List?)?.cast<Map<String, dynamic>>() ??
-      [];
+      (widget.center['time_slots'] as List?)?.cast<Map<String, dynamic>>() ?? [];
 
   double get _totalCost {
     double total = 0;
@@ -175,51 +171,34 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'Book Appointment',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+        title: Text(
+          'Book Service',
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.5,
+            color: AppTheme.textPrimary,
+          ),
         ),
-        backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         centerTitle: false,
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
             child: Container(color: Colors.transparent),
           ),
         ),
       ),
       body: Stack(
         children: [
-          // Background Glow
-          Positioned(
-            top: 100,
-            right: -50,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppTheme.primaryDark.withValues(alpha: 0.15),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryDark.withValues(alpha: 0.1),
-                    blurRadius: 100,
-                  ),
-                ],
-              ),
-            ),
-          ).animate().fadeIn(duration: 800.ms),
-
+          Container(color: const Color(0xFFF8FAFC)),
           SafeArea(
             child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(color: AppTheme.accent),
-                  )
+                ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
                 : Theme(
                     data: Theme.of(context).copyWith(
-                      colorScheme: const ColorScheme.dark(
-                        primary: AppTheme.accent,
+                      colorScheme: const ColorScheme.light(
+                        primary: AppTheme.primary,
                         onSurface: AppTheme.textPrimary,
                       ),
                       canvasColor: Colors.transparent,
@@ -229,279 +208,201 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                       onStepContinue: _nextStep,
                       onStepCancel: _prevStep,
                       physics: const BouncingScrollPhysics(),
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       controlsBuilder: (context, details) {
                         return Padding(
-                          padding: const EdgeInsets.only(top: 24, bottom: 12),
+                          padding: const EdgeInsets.only(top: 32, bottom: 20),
                           child: Row(
                             children: [
                               Expanded(
-                                child: GradientButton(
-                                  text: _currentStep == 3
-                                      ? 'Confirm Booking'
-                                      : 'Continue',
-                                  icon: _currentStep == 3
-                                      ? Icons.check_circle_rounded
-                                      : Icons.arrow_forward_rounded,
-                                  isLoading: _isSubmitting,
+                                child: ElevatedButton(
                                   onPressed: details.onStepContinue,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 18),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                    elevation: 0,
+                                  ),
+                                  child: Text(
+                                    _currentStep == 3 ? 'Confirm Order' : 'Next Step',
+                                    style: GoogleFonts.outfit(fontWeight: FontWeight.w800, fontSize: 16),
+                                  ),
                                 ),
                               ),
                               if (_currentStep > 0) ...[
-                                const SizedBox(width: 16),
+                                const SizedBox(width: 12),
                                 TextButton(
                                   onPressed: details.onStepCancel,
                                   style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 24,
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    backgroundColor: AppTheme.bgCardLight
-                                        .withValues(alpha: 0.5),
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'Back',
-                                    style: TextStyle(
+                                    style: GoogleFonts.outfit(
                                       color: AppTheme.textSecondary,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ),
                               ],
                             ],
-                          ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
+                          ).animate().fadeIn(),
                         );
                       },
                       steps: [
-                        // Step 1: Select Vehicle
                         Step(
                           title: Text(
                             'Select Vehicle',
-                            style: TextStyle(
-                              color: _currentStep == 0
-                                  ? AppTheme.accent
-                                  : AppTheme.textPrimary,
-                              fontWeight: _currentStep == 0
-                                  ? FontWeight.w800
-                                  : FontWeight.w600,
-                              fontSize: 18,
+                            style: GoogleFonts.outfit(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 17,
                             ),
                           ),
                           isActive: _currentStep >= 0,
-                          state: _currentStep > 0
-                              ? StepState.complete
-                              : StepState.indexed,
+                          state: _currentStep > 0 ? StepState.complete : StepState.indexed,
                           content: Padding(
                             padding: const EdgeInsets.only(top: 16),
                             child: Column(
                               children: [
                                 if (_vehicles.isEmpty)
                                   Container(
-                                    padding: const EdgeInsets.all(24),
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(32),
                                     decoration: BoxDecoration(
-                                      color: AppTheme.bgCardLight.withValues(
-                                        alpha: 0.3,
-                                      ),
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: AppTheme.textPrimary.withValues(
-                                          alpha: 0.05,
-                                        ),
-                                      ),
+                                      color: Colors.white,
+                                      borderRadius: AppTheme.radiusMedium,
+                                      border: Border.all(color: const Color(0xFFE2E8F0)),
                                     ),
                                     child: Column(
                                       children: [
-                                        const Icon(
-                                          Icons.directions_car_rounded,
-                                          size: 48,
-                                          color: AppTheme.textMuted,
-                                        ),
-                                        const SizedBox(height: 16),
-                                        const Text(
-                                          'No vehicles added yet',
-                                          style: TextStyle(
+                                        const Icon(Icons.directions_car_rounded, size: 64, color: Color(0xFFCBD5E1)),
+                                        const SizedBox(height: 20),
+                                        Text(
+                                          'No vehicle selected',
+                                          style: GoogleFonts.outfit(
                                             color: AppTheme.textSecondary,
-                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        const SizedBox(height: 16),
-                                        ElevatedButton.icon(
-                                          icon: const Icon(Icons.add_rounded),
-                                          label: const Text('Add Vehicle'),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                AppTheme.primaryLight,
-                                            foregroundColor:
-                                                AppTheme.textPrimary,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
+                                        const SizedBox(height: 20),
+                                        TextButton.icon(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.add_circle_outline_rounded),
+                                          label: Text(
+                                            'Register New Vehicle',
+                                            style: GoogleFonts.outfit(fontWeight: FontWeight.w700),
                                           ),
-                                          onPressed:
-                                              () {}, // Navigate to add vehicle
+                                          style: TextButton.styleFrom(foregroundColor: AppTheme.primary),
                                         ),
                                       ],
                                     ),
                                   ).animate().fadeIn()
                                 else
                                   ..._vehicles.asMap().entries.map(
-                                    (entry) => GlassCard(
-                                      margin: const EdgeInsets.only(bottom: 12),
-                                      padding: const EdgeInsets.all(16),
-                                      onTap: () => setState(
-                                        () => _selectedVehicle =
-                                            entry.value['id'],
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Radio<String>(
-                                            value: entry.value['id'],
-                                            groupValue: _selectedVehicle,
-                                            onChanged: (val) => setState(
-                                              () => _selectedVehicle = val,
-                                            ),
-                                            activeColor: AppTheme.accent,
+                                    (entry) => GestureDetector(
+                                      onTap: () => setState(() => _selectedVehicle = entry.value['id']),
+                                      child: Container(
+                                        margin: const EdgeInsets.only(bottom: 12),
+                                        padding: const EdgeInsets.all(20),
+                                        decoration: BoxDecoration(
+                                          color: _selectedVehicle == entry.value['id'] ? const Color(0xFFEEF2FF) : Colors.white,
+                                          borderRadius: AppTheme.radiusMedium,
+                                          border: Border.all(
+                                            color: _selectedVehicle == entry.value['id'] ? AppTheme.primary : const Color(0xFFE2E8F0),
+                                            width: _selectedVehicle == entry.value['id'] ? 2 : 1,
                                           ),
-                                          const SizedBox(width: 8),
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  _selectedVehicle ==
-                                                      entry.value['id']
-                                                  ? AppTheme.accent.withValues(
-                                                      alpha: 0.2,
-                                                    )
-                                                  : AppTheme.bgCardLight,
-                                              shape: BoxShape.circle,
+                                          boxShadow: _selectedVehicle == entry.value['id'] ? null : AppTheme.softShadow,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              entry.value['vehicle_type'] == 'bike' ? Icons.two_wheeler_rounded : Icons.directions_car_rounded,
+                                              color: _selectedVehicle == entry.value['id'] ? AppTheme.primary : const Color(0xFF94A3B8),
+                                              size: 32,
                                             ),
-                                            child: Icon(
-                                              entry.value['vehicle_type'] ==
-                                                      'bike'
-                                                  ? Icons.two_wheeler_rounded
-                                                  : Icons
-                                                        .directions_car_rounded,
-                                              color:
-                                                  _selectedVehicle ==
-                                                      entry.value['id']
-                                                  ? AppTheme.accent
-                                                  : AppTheme.textMuted,
-                                              size: 24,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${entry.value['make']} ${entry.value['model']}',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w800,
-                                                    fontSize: 16,
-                                                    color:
-                                                        _selectedVehicle ==
-                                                            entry.value['id']
-                                                        ? AppTheme.textPrimary
-                                                        : AppTheme.textPrimary,
+                                            const SizedBox(width: 20),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${entry.value['make']} ${entry.value['model']}',
+                                                    style: GoogleFonts.outfit(
+                                                      fontWeight: FontWeight.w800,
+                                                      fontSize: 16,
+                                                      color: AppTheme.textPrimary,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  entry.value['registration_number'] ??
-                                                      '',
-                                                  style: const TextStyle(
-                                                    color: AppTheme.textMuted,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 1,
+                                                  Text(
+                                                    entry.value['registration_number']?.toUpperCase() ?? '',
+                                                    style: GoogleFonts.outfit(
+                                                      color: AppTheme.textSecondary,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w700,
+                                                      letterSpacing: 1.5,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            if (_selectedVehicle == entry.value['id'])
+                                              const Icon(Icons.check_circle_rounded, color: AppTheme.primary),
+                                          ],
+                                        ),
                                       ),
-                                    ).animate().fadeIn(delay: (entry.key * 100).ms).slideX(begin: 0.1),
+                                    ).animate().fadeIn(delay: (entry.key * 100).ms),
                                   ),
                               ],
                             ),
                           ),
                         ),
-
-                        // Step 2: Select Services
                         Step(
                           title: Text(
                             'Select Services',
-                            style: TextStyle(
-                              color: _currentStep == 1
-                                  ? AppTheme.accent
-                                  : AppTheme.textPrimary,
-                              fontWeight: _currentStep == 1
-                                  ? FontWeight.w800
-                                  : FontWeight.w600,
-                              fontSize: 18,
+                            style: GoogleFonts.outfit(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 17,
                             ),
                           ),
                           isActive: _currentStep >= 1,
-                          state: _currentStep > 1
-                              ? StepState.complete
-                              : StepState.indexed,
+                          state: _currentStep > 1 ? StepState.complete : StepState.indexed,
                           content: Padding(
                             padding: const EdgeInsets.only(top: 16),
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${_selectedServices.length} selected',
-                                      style: const TextStyle(
+                                      '${_selectedServices.length} ITEMS SELECTED',
+                                      style: GoogleFonts.outfit(
                                         color: AppTheme.textSecondary,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        letterSpacing: 1,
                                       ),
                                     ),
-                                    TextButton.icon(
+                                    TextButton(
                                       onPressed: () {
                                         setState(() {
-                                          if (_selectedServices.length ==
-                                              services.length) {
+                                          if (_selectedServices.length == services.length) {
                                             _selectedServices.clear();
                                           } else {
                                             _selectedServices.clear();
-                                            _selectedServices.addAll(
-                                              services.map(
-                                                (s) => s['id'] as String,
-                                              ),
-                                            );
+                                            _selectedServices.addAll(services.map((s) => s['id'] as String));
                                           }
                                         });
                                       },
-                                      icon: Icon(
-                                        _selectedServices.length ==
-                                                services.length
-                                            ? Icons.deselect_rounded
-                                            : Icons.select_all_rounded,
-                                        color: AppTheme.accent,
-                                        size: 18,
-                                      ),
-                                      label: Text(
-                                        _selectedServices.length ==
-                                                services.length
-                                            ? 'Clear All'
-                                            : 'Select All',
-                                        style: const TextStyle(
-                                          color: AppTheme.accent,
-                                          fontWeight: FontWeight.bold,
+                                      child: Text(
+                                        _selectedServices.length == services.length ? 'DESELECT ALL' : 'SELECT ALL',
+                                        style: GoogleFonts.outfit(
+                                          color: AppTheme.primary,
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ),
@@ -510,152 +411,101 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                 const SizedBox(height: 8),
                                 ...services.asMap().entries.map((entry) {
                                   final s = entry.value;
-                                  final isSelected = _selectedServices.contains(
-                                    s['id'],
-                                  );
-                                  return GlassCard(
-                                        margin: const EdgeInsets.only(
-                                          bottom: 12,
+                                  final isSelected = _selectedServices.contains(s['id']);
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 12),
+                                    decoration: BoxDecoration(
+                                      color: isSelected ? const Color(0xFFEEF2FF) : Colors.white,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: isSelected ? AppTheme.primary : const Color(0xFFE2E8F0),
+                                        width: isSelected ? 2 : 1,
+                                      ),
+                                    ),
+                                    child: CheckboxListTile(
+                                      value: isSelected,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          if (val == true) {
+                                            _selectedServices.add(s['id']);
+                                          } else {
+                                            _selectedServices.remove(s['id']);
+                                          }
+                                        });
+                                      },
+                                      title: Text(
+                                        s['service_type_name'] ?? '',
+                                        style: GoogleFonts.outfit(
+                                          color: AppTheme.textPrimary,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15,
                                         ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 12,
+                                      ),
+                                      secondary: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: isSelected ? AppTheme.primary : const Color(0xFFF1F5F9),
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
-                                        onTap: () {
-                                          setState(() {
-                                            if (isSelected) {
-                                              _selectedServices.remove(s['id']);
-                                            } else {
-                                              _selectedServices.add(s['id']);
-                                            }
-                                          });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Checkbox(
-                                              value: isSelected,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  if (val == true) {
-                                                    _selectedServices.add(
-                                                      s['id'],
-                                                    );
-                                                  } else {
-                                                    _selectedServices.remove(
-                                                      s['id'],
-                                                    );
-                                                  }
-                                                });
-                                              },
-                                              activeColor: AppTheme.accent,
-                                              checkColor: Colors.black,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                s['service_type_name'] ?? '',
-                                                style: TextStyle(
-                                                  color: isSelected
-                                                      ? AppTheme.textPrimary
-                                                      : AppTheme.textPrimary,
-                                                  fontWeight: isSelected
-                                                      ? FontWeight.bold
-                                                      : FontWeight.w600,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 6,
-                                                  ),
-                                              decoration: BoxDecoration(
-                                                color: isSelected
-                                                    ? AppTheme.accent
-                                                          .withValues(
-                                                            alpha: 0.15,
-                                                          )
-                                                    : AppTheme.bgCardLight,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: Text(
-                                                '₹${s['price']}',
-                                                style: TextStyle(
-                                                  color: isSelected
-                                                      ? AppTheme.accent
-                                                      : AppTheme.textSecondary,
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                        child: Text(
+                                          '₹${s['price']}',
+                                          style: GoogleFonts.outfit(
+                                            color: isSelected ? Colors.white : AppTheme.textSecondary,
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 13,
+                                          ),
                                         ),
-                                      )
-                                      .animate()
-                                      .fadeIn(delay: (entry.key * 50).ms)
-                                      .scale(begin: const Offset(0.95, 0.95));
+                                      ),
+                                      activeColor: AppTheme.primary,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                      controlAffinity: ListTileControlAffinity.leading,
+                                    ),
+                                  ).animate().fadeIn(delay: (entry.key * 50).ms);
                                 }),
                               ],
                             ),
                           ),
                         ),
-
-                        // Step 3: Date & Time
                         Step(
                           title: Text(
                             'Schedule',
-                            style: TextStyle(
-                              color: _currentStep == 2
-                                  ? AppTheme.accent
-                                  : AppTheme.textPrimary,
-                              fontWeight: _currentStep == 2
-                                  ? FontWeight.w800
-                                  : FontWeight.w600,
-                              fontSize: 18,
+                            style: GoogleFonts.outfit(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 17,
                             ),
                           ),
                           isActive: _currentStep >= 2,
-                          state: _currentStep > 2
-                              ? StepState.complete
-                              : StepState.indexed,
+                          state: _currentStep > 2 ? StepState.complete : StepState.indexed,
                           content: Padding(
                             padding: const EdgeInsets.only(top: 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Date',
-                                  style: TextStyle(
+                                Text(
+                                  'VISIT DATE',
+                                  style: GoogleFonts.outfit(
                                     color: AppTheme.textSecondary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 11,
+                                    letterSpacing: 1.2,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                GlassCard(
-                                  padding: const EdgeInsets.all(20),
+                                GestureDetector(
                                   onTap: () async {
                                     final date = await showDatePicker(
                                       context: context,
                                       initialDate: _selectedDate,
                                       firstDate: DateTime.now(),
-                                      lastDate: DateTime.now().add(
-                                        const Duration(days: 90),
-                                      ),
+                                      lastDate: DateTime.now().add(const Duration(days: 90)),
                                       builder: (context, child) {
                                         return Theme(
-                                          data: ThemeData.dark().copyWith(
-                                            colorScheme: const ColorScheme.dark(
-                                              primary: AppTheme.accent,
-                                              onPrimary: Colors.black,
-                                              surface: AppTheme.bgCard,
+                                          data: ThemeData.light().copyWith(
+                                            colorScheme: const ColorScheme.light(
+                                              primary: AppTheme.primary,
+                                              onPrimary: Colors.white,
+                                              surface: Colors.white,
                                               onSurface: AppTheme.textPrimary,
                                             ),
                                           ),
@@ -663,147 +513,87 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                                         );
                                       },
                                     );
-                                    if (date != null) {
-                                      setState(() => _selectedDate = date);
-                                    }
+                                    if (date != null) setState(() => _selectedDate = date);
                                   },
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: AppTheme
-                                              .primaryGradient
-                                              .colors[0]
-                                              .withValues(alpha: 0.2),
-                                          shape: BoxShape.circle,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: AppTheme.radiusMedium,
+                                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                                      boxShadow: AppTheme.softShadow,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.calendar_month_rounded, color: AppTheme.primary, size: 28),
+                                        const SizedBox(width: 16),
+                                        Text(
+                                          DateFormat('EEEE, MMM d, yyyy').format(_selectedDate),
+                                          style: GoogleFonts.outfit(
+                                            color: AppTheme.textPrimary,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
-                                        child: const Icon(
-                                          Icons.calendar_month_rounded,
-                                          color: AppTheme.primaryLight,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Text(
-                                        DateFormat(
-                                          'EEEE, MMM d, yyyy',
-                                        ).format(_selectedDate),
-                                        style: const TextStyle(
-                                          color: AppTheme.textPrimary,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      const Icon(
-                                        Icons.edit_calendar_rounded,
-                                        color: AppTheme.textMuted,
-                                        size: 20,
-                                      ),
-                                    ],
+                                        const Spacer(),
+                                        const Icon(Icons.chevron_right_rounded, color: Color(0xFF94A3B8)),
+                                      ],
+                                    ),
                                   ),
                                 ).animate().fadeIn(),
-
                                 const SizedBox(height: 24),
-                                const Text(
-                                  'Time Slot',
-                                  style: TextStyle(
+                                Text(
+                                  'PREFERED TIME SLOT',
+                                  style: GoogleFonts.outfit(
                                     color: AppTheme.textSecondary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 11,
+                                    letterSpacing: 1.2,
                                   ),
                                 ),
                                 const SizedBox(height: 12),
                                 Wrap(
                                   spacing: 12,
                                   runSpacing: 12,
-                                  children: timeSlots.asMap().entries.map((
-                                    entry,
-                                  ) {
+                                  children: timeSlots.asMap().entries.map((entry) {
                                     final slot = entry.value;
-                                    final isSelected =
-                                        _selectedTimeSlot == slot['id'];
+                                    final isSelected = _selectedTimeSlot == slot['id'];
                                     return GestureDetector(
-                                          onTap: () => setState(
-                                            () =>
-                                                _selectedTimeSlot = slot['id'],
+                                      onTap: () => setState(() => _selectedTimeSlot = slot['id']),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                        decoration: BoxDecoration(
+                                          color: isSelected ? AppTheme.primary : Colors.white,
+                                          borderRadius: BorderRadius.circular(12),
+                                          border: Border.all(
+                                            color: isSelected ? AppTheme.primary : const Color(0xFFE2E8F0),
+                                            width: isSelected ? 2 : 1,
                                           ),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 12,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              gradient: isSelected
-                                                  ? AppTheme.primaryGradient
-                                                  : null,
-                                              color: isSelected
-                                                  ? null
-                                                  : AppTheme.bgCardLight
-                                                        .withValues(alpha: 0.6),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                color: isSelected
-                                                    ? AppTheme.primaryLight
-                                                    : AppTheme.textPrimary
-                                                          .withValues(
-                                                            alpha: 0.05,
-                                                          ),
-                                                width: isSelected ? 2 : 1,
-                                              ),
-                                              boxShadow: isSelected
-                                                  ? [
-                                                      BoxShadow(
-                                                        color: AppTheme.primary
-                                                            .withValues(
-                                                              alpha: 0.4,
-                                                            ),
-                                                        blurRadius: 8,
-                                                        offset: const Offset(
-                                                          0,
-                                                          4,
-                                                        ),
-                                                      ),
-                                                    ]
-                                                  : null,
-                                            ),
-                                            child: Text(
-                                              '${slot['start_time']} - ${slot['end_time']}',
-                                              style: TextStyle(
-                                                color: isSelected
-                                                    ? AppTheme.textPrimary
-                                                    : AppTheme.textSecondary,
-                                                fontWeight: isSelected
-                                                    ? FontWeight.w900
-                                                    : FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            ),
+                                          boxShadow: isSelected ? null : AppTheme.softShadow,
+                                        ),
+                                        child: Text(
+                                          '${slot['start_time']} - ${slot['end_time']}',
+                                          style: GoogleFonts.outfit(
+                                            color: isSelected ? Colors.white : AppTheme.textSecondary,
+                                            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                                            fontSize: 14,
                                           ),
-                                        )
-                                        .animate()
-                                        .fadeIn(delay: (entry.key * 50).ms)
-                                        .scale(begin: const Offset(0.9, 0.9));
+                                        ),
+                                      ),
+                                    ).animate().fadeIn(delay: (entry.key * 50).ms);
                                   }).toList(),
                                 ),
                               ],
                             ),
                           ),
                         ),
-
-                        // Step 4: Confirm
                         Step(
                           title: Text(
-                            'Review',
-                            style: TextStyle(
-                              color: _currentStep == 3
-                                  ? AppTheme.accent
-                                  : AppTheme.textPrimary,
-                              fontWeight: _currentStep == 3
-                                  ? FontWeight.w800
-                                  : FontWeight.w600,
-                              fontSize: 18,
+                            'Confirmation',
+                            style: GoogleFonts.outfit(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 17,
                             ),
                           ),
                           isActive: _currentStep >= 3,
@@ -811,127 +601,67 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
                             padding: const EdgeInsets.only(top: 16),
                             child: Column(
                               children: [
-                                GlassCard(
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: AppTheme.radiusMedium,
+                                    boxShadow: AppTheme.softShadow,
+                                  ),
                                   padding: const EdgeInsets.all(24),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const Row(
+                                      Row(
                                         children: [
-                                          Icon(
-                                            Icons.receipt_long_rounded,
-                                            color: AppTheme.accent,
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFEEF2FF),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: const Icon(Icons.receipt_long_rounded, color: AppTheme.primary, size: 24),
                                           ),
-                                          SizedBox(width: 8),
+                                          const SizedBox(width: 16),
                                           Text(
                                             'Order Summary',
-                                            style: TextStyle(
+                                            style: GoogleFonts.outfit(
                                               fontSize: 20,
-                                              fontWeight: FontWeight.w900,
+                                              fontWeight: FontWeight.w800,
                                               color: AppTheme.textPrimary,
-                                              letterSpacing: -0.5,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 16),
-                                      Container(
-                                        height: 1,
-                                        color: AppTheme.textMuted.withValues(
-                                          alpha: 0.15,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                      _summaryRow(
-                                        'Service Center',
-                                        widget.center['name'] ?? '',
-                                        Icons.store_rounded,
-                                      ),
-                                      _summaryRow(
-                                        'Date',
-                                        DateFormat(
-                                          'MMM d, yyyy',
-                                        ).format(_selectedDate),
-                                        Icons.event_rounded,
-                                      ),
-                                      _summaryRow(
-                                        'Services',
-                                        '${_selectedServices.length} selected items',
-                                        Icons.miscellaneous_services_rounded,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Container(
-                                        height: 1,
-                                        color: AppTheme.textMuted.withValues(
-                                          alpha: 0.15,
-                                        ),
-                                        margin: const EdgeInsets.only(
-                                          bottom: 16,
-                                        ),
-                                      ),
+                                      const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Divider(color: Color(0xFFF1F5F9))),
+                                      _summaryRow('Service Center', widget.center['name'] ?? '', Icons.store_rounded),
+                                      _summaryRow('Appointment', DateFormat('MMM d, yyyy').format(_selectedDate), Icons.event_available_rounded),
+                                      _summaryRow('Vehicle', _selectedVehicle != null && _vehicles.any((v) => v['id'] == _selectedVehicle) ? _vehicles.firstWhere((v) => v['id'] == _selectedVehicle)['registration_number']?.toUpperCase() ?? '' : '', Icons.directions_car_rounded),
+                                      const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Divider(color: Color(0xFFF1F5F9))),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text(
-                                            'Total Estimated',
-                                            style: TextStyle(
+                                          Text(
+                                            'Estimated Total',
+                                            style: GoogleFonts.outfit(
                                               color: AppTheme.textSecondary,
                                               fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                           Text(
-                                            '₹${_totalCost.toStringAsFixed(2)}',
-                                            style: const TextStyle(
-                                              color: AppTheme.accent,
-                                              fontSize: 24,
+                                            '₹${_totalCost.toStringAsFixed(0)}',
+                                            style: GoogleFonts.outfit(
+                                              color: AppTheme.primary,
+                                              fontSize: 28,
                                               fontWeight: FontWeight.w900,
-                                              shadows: [
-                                                Shadow(
-                                                  color: AppTheme.accent,
-                                                  blurRadius: 10,
-                                                ),
-                                              ],
                                             ),
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
-                                ).animate().slideY(begin: 0.2),
-                                const SizedBox(height: 24),
-                                GlassCard(
-                                  padding: const EdgeInsets.all(4),
-                                  child: TextField(
-                                    controller: _descriptionCtrl,
-                                    maxLines: 4,
-                                    decoration: InputDecoration(
-                                      hintText:
-                                          'Any specific problems? Mention them here...',
-                                      hintStyle: const TextStyle(
-                                        color: AppTheme.textMuted,
-                                      ),
-                                      labelText: 'Extra Notes (Optional)',
-                                      labelStyle: const TextStyle(
-                                        color: AppTheme.primaryLight,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      filled: true,
-                                      fillColor: AppTheme.bgCardLight
-                                          .withValues(alpha: 0.3),
-                                    ),
-                                    style: const TextStyle(
-                                      color: AppTheme.textPrimary,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ).animate().slideY(begin: 0.3, delay: 100.ms),
+                                ),
                               ],
                             ),
                           ),
@@ -947,22 +677,26 @@ class _BookServiceScreenState extends State<BookServiceScreen> {
 
   Widget _summaryRow(String label, String value, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          Icon(icon, color: AppTheme.textMuted, size: 18),
+          Icon(icon, size: 18, color: const Color(0xFF94A3B8)),
           const SizedBox(width: 8),
           Text(
-            label,
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 15),
+            '$label:',
+            style: GoogleFonts.outfit(
+              color: AppTheme.textSecondary,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const Spacer(),
           Text(
             value,
-            style: const TextStyle(
+            style: GoogleFonts.outfit(
               color: AppTheme.textPrimary,
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],

@@ -16,6 +16,7 @@ class AuthProvider extends ChangeNotifier {
   String get userId => _user?['id'] ?? '';
   String get fullName =>
       '${_user?['first_name'] ?? ''} ${_user?['last_name'] ?? ''}'.trim();
+  String get firstName => _user?['first_name'] ?? '';
 
   Future<void> init() async {
     await ApiService.init();

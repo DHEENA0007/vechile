@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
@@ -44,36 +45,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+        title: Text(
+          'My Profile',
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+            color: AppTheme.textPrimary,
+          ),
         ),
-        backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         centerTitle: false,
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(color: Colors.transparent),
           ),
         ),
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-              color: AppTheme.error.withValues(alpha: 0.15),
-              shape: BoxShape.circle,
-              border: Border.all(color: AppTheme.error.withValues(alpha: 0.3)),
-            ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.logout_rounded,
-                color: AppTheme.error,
-                size: 20,
-              ),
-              onPressed: () => _confirmLogout(context),
-            ),
+          IconButton(
+            icon: const Icon(Icons.logout_rounded, color: AppTheme.error, size: 22),
+            onPressed: () => _confirmLogout(context),
           ),
+          const SizedBox(width: 12),
         ],
       ),
       body: Stack(
@@ -123,7 +117,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   // Profile Card
-                  GlassCard(
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: AppTheme.radiusLarge,
+                      boxShadow: AppTheme.softShadow,
+                    ),
                     padding: const EdgeInsets.all(32),
                     child: Column(
                       children: [
@@ -132,67 +132,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: AppTheme.primaryGradient,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primary.withValues(alpha: 0.4),
-                                blurRadius: 20,
-                              ),
-                            ],
                           ),
                           child: CircleAvatar(
-                            radius: 44,
-                            backgroundColor: AppTheme.bgCard,
+                            radius: 48,
+                            backgroundColor: Colors.white,
                             child: Text(
                               (user?['first_name'] ?? 'U')[0].toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 36,
+                              style: GoogleFonts.outfit(
+                                fontSize: 40,
                                 fontWeight: FontWeight.w900,
-                                color: AppTheme.primaryLight,
+                                color: AppTheme.primary,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 20),
                         Text(
                           auth.fullName,
-                          style: const TextStyle(
+                          style: GoogleFonts.outfit(
                             fontSize: 24,
                             fontWeight: FontWeight.w900,
                             color: AppTheme.textPrimary,
                             letterSpacing: -0.5,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 4),
                         Text(
                           user?['email'] ?? '',
-                          style: const TextStyle(
+                          style: GoogleFonts.outfit(
                             color: AppTheme.textSecondary,
                             fontSize: 15,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 20),
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 6,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            gradient: AppTheme.primaryGradient,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primary.withValues(alpha: 0.3),
-                                blurRadius: 8,
-                              ),
-                            ],
+                            color: AppTheme.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            user?['role']?.toString().toUpperCase() ?? '',
-                            style: const TextStyle(
-                              color: AppTheme.textPrimary,
-                              fontSize: 12,
+                            (user?['role']?.toString().toUpperCase() ?? 'USER'),
+                            style: GoogleFonts.outfit(
+                              color: AppTheme.primary,
+                              fontSize: 11,
                               fontWeight: FontWeight.w900,
-                              letterSpacing: 1,
+                              letterSpacing: 2,
                             ),
                           ),
                         ),
@@ -202,22 +188,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   // Contact Info
                   const SizedBox(height: 24),
-                  GlassCard(
+                  // Contact Info
+                  const SizedBox(height: 24),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: AppTheme.radiusMedium,
+                      boxShadow: AppTheme.softShadow,
+                    ),
                     padding: const EdgeInsets.all(24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           children: [
-                            Icon(
-                              Icons.contact_mail_rounded,
-                              color: AppTheme.accent,
-                              size: 20,
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(Icons.contact_mail_rounded, color: Color(0xFF6366F1), size: 18),
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 12),
                             Text(
-                              'Contact Information',
-                              style: TextStyle(
+                              'Personal Information',
+                              style: GoogleFonts.outfit(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
                                 color: AppTheme.textPrimary,
@@ -225,52 +222,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                        _infoTile(
-                          Icons.phone_rounded,
-                          'Phone',
-                          user?['phone'] ?? 'Not set',
-                        ),
-                        Container(
-                          height: 1,
-                          color: AppTheme.textPrimary.withValues(alpha: 0.04),
-                          margin: const EdgeInsets.symmetric(vertical: 4),
-                        ),
-                        _infoTile(
-                          Icons.location_on_rounded,
-                          'Address',
-                          user?['address'] ?? 'Not set',
-                        ),
-                        Container(
-                          height: 1,
-                          color: AppTheme.textPrimary.withValues(alpha: 0.04),
-                          margin: const EdgeInsets.symmetric(vertical: 4),
-                        ),
-                        _infoTile(
-                          Icons.location_city_rounded,
-                          'City',
-                          '${user?['city'] ?? ''} ${user?['state'] ?? ''}',
-                        ),
+                        const SizedBox(height: 24),
+                        _infoTile(Icons.phone_rounded, 'Phone', user?['phone'] ?? 'Not set'),
+                        const Divider(color: Color(0xFFF1F5F9), height: 32),
+                        _infoTile(Icons.location_on_rounded, 'Address', user?['address'] ?? 'Not set'),
+                        const Divider(color: Color(0xFFF1F5F9), height: 32),
+                        _infoTile(Icons.location_city_rounded, 'Location', '${user?['city'] ?? ''}, ${user?['state'] ?? ''}'),
                       ],
                     ),
                   ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1),
 
                   // My Vehicles
                   const SizedBox(height: 32),
+                  // My Vehicles
+                  const SizedBox(height: 32),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
-                            Icons.garage_rounded,
-                            color: AppTheme.accent,
-                            size: 22,
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppTheme.primary.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(Icons.garage_rounded, color: AppTheme.primary, size: 20),
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 12),
                           Text(
                             'My Garage',
-                            style: TextStyle(
+                            style: GoogleFonts.outfit(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
                               color: AppTheme.textPrimary,
@@ -279,25 +261,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: AppTheme.primaryGradient,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppTheme.primary.withValues(alpha: 0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.add_rounded,
-                            color: AppTheme.textPrimary,
-                            size: 22,
+                      GestureDetector(
+                        onTap: () => _showAddVehicleDialog(),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            gradient: AppTheme.primaryGradient,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: AppTheme.glowShadow(AppTheme.primary),
                           ),
-                          onPressed: () => _showAddVehicleDialog(),
+                          child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
                         ),
                       ),
                     ],
@@ -347,86 +320,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   else
                     ..._vehicles.asMap().entries.map((entry) {
                       final v = entry.value;
-                      return GlassCard(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(14),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        AppTheme.primary.withValues(alpha: 0.3),
-                                        AppTheme.primaryDark.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.circular(14),
-                                    border: Border.all(
-                                      color: AppTheme.primary.withValues(
-                                        alpha: 0.2,
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: AppTheme.radiusMedium,
+                          boxShadow: AppTheme.softShadow,
+                          border: Border.all(color: AppTheme.primary.withValues(alpha: 0.05)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.primary.withValues(alpha: 0.05),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Icon(
+                                  v['vehicle_type'] == 'bike'
+                                      ? Icons.two_wheeler_rounded
+                                      : Icons.directions_car_rounded,
+                                  color: AppTheme.primary,
+                                  size: 24,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${v['make']} ${v['model']}',
+                                      style: GoogleFonts.outfit(
+                                        fontWeight: FontWeight.w800,
+                                        color: AppTheme.textPrimary,
+                                        fontSize: 16,
                                       ),
                                     ),
-                                  ),
-                                  child: Icon(
-                                    v['vehicle_type'] == 'bike'
-                                        ? Icons.two_wheeler_rounded
-                                        : Icons.directions_car_rounded,
-                                    color: AppTheme.primaryLight,
-                                    size: 26,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${v['make']} ${v['model']}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: AppTheme.textPrimary,
-                                          fontSize: 16,
-                                        ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${v['registration_number']} • ${v['year']} • ${v['fuel_type']}',
+                                      style: GoogleFonts.outfit(
+                                        color: AppTheme.textMuted,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.5,
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '${v['registration_number']} • ${v['year']} • ${v['fuel_type']}',
-                                        style: const TextStyle(
-                                          color: AppTheme.textMuted,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.error.withValues(
-                                      alpha: 0.1,
                                     ),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.delete_outline_rounded,
-                                      color: AppTheme.error,
-                                      size: 20,
-                                    ),
-                                    onPressed: () => _deleteVehicle(v['id']),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          )
-                          .animate()
-                          .fadeIn(delay: (400 + entry.key * 100).ms)
-                          .slideX(begin: 0.1);
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline_rounded, color: AppTheme.error, size: 20),
+                                onPressed: () => _deleteVehicle(v['id']),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ).animate().fadeIn(delay: (400 + entry.key * 100).ms).slideX(begin: 0.1);
                     }),
 
                   const SizedBox(height: 32),
@@ -440,46 +393,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _infoTile(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: AppTheme.bgCardLight,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: AppTheme.textMuted, size: 16),
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppTheme.primary.withValues(alpha: 0.05),
+            shape: BoxShape.circle,
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: AppTheme.textMuted,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
+          child: Icon(icon, color: AppTheme.primary, size: 16),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label.toUpperCase(),
+                style: GoogleFonts.outfit(
+                  color: AppTheme.textMuted,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    color: AppTheme.textPrimary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                  ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: GoogleFonts.outfit(
+                  color: AppTheme.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -606,6 +556,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               onPressed: () async {
+                if (makeCtrl.text.isEmpty ||
+                    modelCtrl.text.isEmpty ||
+                    yearCtrl.text.isEmpty ||
+                    regCtrl.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill all vehicle details'),
+                      backgroundColor: AppTheme.warning,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  return;
+                }
                 try {
                   await ApiService.post(
                     '/accounts/vehicles/',
@@ -666,54 +629,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppTheme.bgCard,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: Text(
+          'Logout',
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w800),
         ),
-        title: const Row(
-          children: [
-            Icon(Icons.logout_rounded, color: AppTheme.error),
-            SizedBox(width: 8),
-            Text(
-              'Logout',
-              style: TextStyle(
-                color: AppTheme.textPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        content: const Text(
-          'Are you sure you want to logout?',
-          style: TextStyle(color: AppTheme.textSecondary),
+        content: Text(
+          'Are you sure you want to exit your account?',
+          style: GoogleFonts.outfit(color: AppTheme.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(
-                color: AppTheme.textMuted,
-                fontWeight: FontWeight.bold,
-              ),
+              style: GoogleFonts.outfit(color: AppTheme.textMuted, fontWeight: FontWeight.w700),
             ),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
-              backgroundColor: AppTheme.error.withValues(alpha: 0.2),
-              foregroundColor: AppTheme.error,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              backgroundColor: AppTheme.error,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () {
               Navigator.pop(context);
               context.read<AuthProvider>().logout();
             },
-            child: const Text(
+            child: Text(
               'Logout',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.outfit(fontWeight: FontWeight.w800),
             ),
           ),
         ],
