@@ -1,0 +1,93 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              VEHICLE SERVICE MANAGEMENT - SAMPLE ACCOUNTS                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Server: http://localhost:8080                                             ║
+║  API Base: http://localhost:8080/api/                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+════════════════════════════════════════════════════════════════════════════════
+  🚗  USER PORTAL (Vehicle Owners)
+════════════════════════════════════════════════════════════════════════════════
+
+  Account 1:
+    Username : user1
+    Password : password123
+    Email    : user1@test.com
+    Name     : Rajesh Kumar
+    Phone    : 9876543210
+    Vehicles : Maruti Suzuki Swift (TN01AB1234)
+               Royal Enfield Classic 350 (TN01CD5678)
+
+  Account 2:
+    Username : user2
+    Password : password123
+    Email    : user2@test.com
+    Name     : Priya Sharma
+    Phone    : 9876543211
+    Vehicles : Hyundai i20 (TN02EF9012)
+
+
+════════════════════════════════════════════════════════════════════════════════
+  🏢  OWNER PORTAL (Service Center Owners)
+════════════════════════════════════════════════════════════════════════════════
+
+  Account 1:
+    Username       : owner1
+    Password       : password123
+    Email          : owner1@test.com
+    Name           : Suresh Mechanics
+    Phone          : 9876543220
+    Service Center : Suresh Auto Care (Active)
+
+  Account 2:
+    Username       : owner2
+    Password       : password123
+    Email          : owner2@test.com
+    Name           : Vijay Auto
+    Phone          : 9876543221
+    Service Center : Vijay Speed Motors (Active)
+
+  Admin Account:
+    Username : admin
+    Password : admin123
+    Email    : admin@test.com
+    Name     : Admin User
+    Role     : owner (superuser)
+
+
+════════════════════════════════════════════════════════════════════════════════
+  🔧  MECHANIC PORTAL
+════════════════════════════════════════════════════════════════════════════════
+
+  Account 1:
+    Username       : mechanic1
+    Password       : password123
+    Email          : mech1@test.com
+    Name           : Arjun Rajan
+    Phone          : 9876543230
+    Assigned To    : Suresh Auto Care (owner1)
+
+  Account 2:
+    Username       : mechanic2
+    Password       : password123
+    Email          : mech2@test.com
+    Name           : Karthik Venkat
+    Phone          : 9876543231
+    Assigned To    : Vijay Speed Motors (owner2)
+
+
+════════════════════════════════════════════════════════════════════════════════
+  📋  QUICK REFERENCE
+════════════════════════════════════════════════════════════════════════════════
+
+  Role         Username      Password       Login As
+  ─────────    ──────────    ────────────   ─────────────────
+  User         user1         password123    Vehicle Owner
+  User         user2         password123    Vehicle Owner
+  Owner        owner1        password123    Service Center Owner
+  Owner        owner2        password123    Service Center Owner
+  Owner        admin         admin123       Admin / Owner
+  Mechanic     mechanic1     password123    Mechanic
+  Mechanic     mechanic2     password123    Mechanic
+
+════════════════════════════════════════════════════════════════════════════════

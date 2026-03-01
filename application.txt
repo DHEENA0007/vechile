@@ -1,0 +1,429 @@
+Vehicle Service Management Mobile Application
+
+Backend: Python Django
+Database: SQLite3
+Frontend: Flutter (Mobile Application)
+
+📌 Application Overview
+
+This Vehicle Service Application connects:
+
+Vehicle Owners (Users)
+
+Service Center Owners
+
+Mechanics
+
+The system allows users to search nearby service centers, book vehicle services, track service status, and manage service history. Service centers manage bookings and mechanics. Mechanics update real-time service progress.
+
+The design follows real-world workshop workflow logic.
+
+🏗️ Required Portals
+
+User Portal (Vehicle Owner)
+
+Service Center Owner Portal
+
+Mechanic Portal
+
+All portals are mobile-based with role-based login redirection.
+
+👤 1. USER PORTAL (Vehicle Owner)
+Core Purpose
+
+Search service centers, book service appointments, track progress, view service history, and make payments.
+
+Required Screens
+1. Authentication Screens
+
+Register
+
+Login
+
+Forgot Password
+
+2. User Dashboard
+
+Displays:
+
+Upcoming bookings
+
+Active service status
+
+Last service summary
+
+Quick search bar
+
+3. Search Service Center Screen
+
+Features:
+
+Location-based search
+
+Filter by rating
+
+Filter by service type
+
+View distance
+
+View availability
+
+4. Service Center Detail Screen
+
+Displays:
+
+Center name
+
+Address and map location
+
+Ratings and reviews
+
+Available services
+
+Estimated pricing
+
+Available time slots
+
+Book Appointment button
+
+5. Book Service Screen
+
+Fields:
+
+Vehicle selection
+
+Service type
+
+Select date
+
+Select time slot
+
+Add problem description
+
+Upload vehicle image
+
+Confirm booking
+
+6. Booking Confirmation Screen
+
+Displays:
+
+Booking ID
+
+Date and time
+
+Service center details
+
+Estimated cost
+
+7. Active Service Tracking Screen
+
+Shows:
+
+Service status timeline:
+
+Booking confirmed
+
+Vehicle received
+
+Inspection completed
+
+Service in progress
+
+Service completed
+
+Ready for pickup
+
+Mechanic notes
+
+Estimated completion time
+
+8. Payment Screen
+
+Features:
+
+View final bill
+
+Service breakdown
+
+Make payment
+
+Download invoice
+
+9. Service History Screen
+
+Displays:
+
+Previous services
+
+Cost details
+
+Service reports
+
+Download invoice
+
+10. Reviews Screen
+
+User can:
+
+Rate service center
+
+Write review
+
+Submit feedback
+
+11. Profile Screen
+
+Manage personal details
+
+Add vehicles
+
+View saved addresses
+
+🏢 2. SERVICE CENTER OWNER PORTAL
+Core Purpose
+
+Manage service center operations, bookings, mechanics, billing, and performance.
+
+Required Screens
+1. Authentication Screens
+
+Login
+
+Forgot Password
+
+Owner accounts are approved during onboarding.
+
+2. Owner Dashboard
+
+Displays:
+
+Today’s bookings
+
+Active services
+
+Completed services
+
+Daily revenue
+
+Pending payments
+
+3. Booking Management Screen
+
+Shows:
+
+New bookings
+
+Upcoming bookings
+
+Cancelled bookings
+
+Booking details
+
+Accept or reject booking
+
+4. Service Job Detail Screen
+
+Displays:
+
+Vehicle details
+
+User information
+
+Reported issues
+
+Assign mechanic
+
+Update service status
+
+5. Mechanic Management Screen
+
+Add mechanic
+
+View mechanic list
+
+Assign roles
+
+View workload
+
+Track mechanic performance
+
+6. Service Update Screen
+
+Owner can:
+
+Add inspection report
+
+Update estimated cost
+
+Approve additional repairs
+
+Notify user
+
+7. Billing & Invoice Screen
+
+Generate invoice
+
+Add spare parts cost
+
+Add labor charges
+
+Apply tax
+
+Finalize bill
+
+Send invoice to user
+
+8. Revenue Report Screen
+
+Displays:
+
+Daily earnings
+
+Monthly earnings
+
+Service-wise income
+
+Mechanic productivity
+
+9. Reviews & Feedback Screen
+
+View user ratings
+
+Respond to feedback
+
+10. Profile & Center Settings Screen
+
+Update center details
+
+Update working hours
+
+Manage service types
+
+Manage pricing
+
+🔧 3. MECHANIC PORTAL
+Core Purpose
+
+Receive assigned jobs, update service progress, and add service notes.
+
+Required Screens
+1. Authentication Screen
+
+Login
+
+2. Mechanic Dashboard
+
+Displays:
+
+Assigned jobs
+
+In-progress services
+
+Completed jobs
+
+Today's tasks
+
+3. Job Detail Screen
+
+Displays:
+
+Vehicle details
+
+Problem description
+
+Service checklist
+
+Add notes
+
+Upload repair images
+
+4. Update Status Screen
+
+Mechanic can mark:
+
+Inspection done
+
+Parts required
+
+Repair started
+
+Repair completed
+
+5. Service Completion Screen
+
+Confirm completion
+
+Add final remarks
+
+Submit to owner for billing
+
+🔄 Real-World Workflow Logic
+
+User searches and books appointment.
+
+Service center owner reviews and confirms booking.
+
+On service day, vehicle received and status updated.
+
+Mechanic performs inspection and updates job.
+
+Owner updates cost and seeks user approval if needed.
+
+Mechanic completes service.
+
+Owner generates final bill.
+
+User makes payment.
+
+Service marked completed.
+
+User leaves review.
+
+🔐 System Logic Essentials
+
+Role-based authentication
+
+Real-time service status updates
+
+Booking time slot management
+
+Automatic notification system
+
+Invoice generation
+
+Service history tracking
+
+Mechanic assignment control
+
+Status-based workflow management
+
+📱 Summary of Required Screens
+
+User Portal → ~11 core screens
+Owner Portal → ~10 core screens
+Mechanic Portal → ~5 core screens
+
+Total structured screens → ~26–30 screens
+
+🎯 Final Outcome
+
+This Vehicle Service Application provides:
+
+Real-time booking management
+
+Service workflow tracking
+
+Mechanic job assignment
+
+Digital billing and invoices
+
+Service history record
+
+Customer feedback system
+
+Built using:
+
+Python Django (Business Logic & APIs)
+SQLite3 (Database)
+Flutter (Mobile UI)
