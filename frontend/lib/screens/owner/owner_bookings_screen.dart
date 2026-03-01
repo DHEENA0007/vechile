@@ -364,14 +364,25 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
         ],
       ]);
     } else if (status == 'vehicle_received') {
-      actions.add(
-        _actionButton(
-          'Inspection Done',
-          AppTheme.warning,
-          Icons.search_rounded,
-          () => _showInspectionDialog(booking['id']),
-        ),
-      );
+      if (booking['mechanic'] == null) {
+        actions.add(
+          _actionButton(
+            'Assign Mechanic',
+            AppTheme.primary,
+            Icons.person_add_rounded,
+            () => _showAssignMechanic(booking['id'], booking['service_center']?.toString() ?? ''),
+          ),
+        );
+      } else {
+        actions.add(
+          _actionButton(
+            'Inspection Done',
+            AppTheme.warning,
+            Icons.search_rounded,
+            () => _showInspectionDialog(booking['id']),
+          ),
+        );
+      }
     } else if (status == 'inspection_done') {
       actions.add(
         const Padding(

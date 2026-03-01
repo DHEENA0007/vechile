@@ -200,6 +200,10 @@ class OwnerBookingActionView(APIView):
         if booking.status != expected_from:
             return Response({'error': f'Cannot {action} from status {booking.status}'}, status=400)
 
+        # Block inspection if no mechanic assigned
+        if action == 'inspection_done' and not booking.mechanic:
+            return Response({'error': 'Please assign a mechanic before performing inspection'}, status=400)
+
         booking.status = new_status
 
         # Handle mechanic assignment
