@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OwnerMechanicsScreen extends StatefulWidget {
   const OwnerMechanicsScreen({super.key});
@@ -62,9 +63,9 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Mechanic Management',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w800, letterSpacing: -0.5),
         ),
         backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
         elevation: 0,
@@ -99,9 +100,9 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
             Icons.person_add_rounded,
             color: AppTheme.textPrimary,
           ),
-          label: const Text(
+          label: Text(
             'Add Mechanic',
-            style: TextStyle(
+            style: GoogleFonts.outfit(
               color: AppTheme.textPrimary,
               fontWeight: FontWeight.bold,
             ),
@@ -147,7 +148,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                               value: c['id'] as String,
                               child: Text(
                                 c['name'] ?? '',
-                                style: const TextStyle(
+                                style: GoogleFonts.outfit(
                                   color: AppTheme.textPrimary,
                                 ),
                               ),
@@ -187,19 +188,19 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                                 ),
                               ),
                               const SizedBox(height: 20),
-                              const Text(
-                                'No Mechanics',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppTheme.textPrimary,
+                                Text(
+                                  'No Mechanics',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.textPrimary,
+                                  ),
                                 ),
-                              ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Add mechanics to manage service jobs',
-                                style: TextStyle(color: AppTheme.textMuted),
-                              ),
+                                Text(
+                                  'Add mechanics to manage service jobs',
+                                  style: GoogleFonts.outfit(color: AppTheme.textMuted),
+                                ),
                             ],
                           ).animate().fadeIn(),
                         )
@@ -255,7 +256,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
               backgroundColor: AppTheme.bgCard,
               child: Text(
                 (user['first_name'] ?? 'M')[0].toUpperCase(),
-                style: const TextStyle(
+                style: GoogleFonts.outfit(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   color: AppTheme.primary,
@@ -270,7 +271,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
               children: [
                 Text(
                   user['full_name'] ?? '',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: AppTheme.textPrimary,
@@ -279,7 +280,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   mechanic['specialization'] ?? 'General',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     color: AppTheme.textSecondary,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
@@ -321,7 +322,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
             ),
             child: Text(
               mechanic['is_available'] == true ? 'Available' : 'Busy',
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: mechanic['is_available'] == true
                     ? AppTheme.success
                     : AppTheme.error,
@@ -344,7 +345,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
       ),
       child: Text(
         label,
-        style: TextStyle(
+        style: GoogleFonts.outfit(
           color: color,
           fontSize: 11,
           fontWeight: FontWeight.w700,
@@ -373,13 +374,13 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
           ),
-          title: const Row(
+          title: Row(
             children: [
               Icon(Icons.person_add_rounded, color: AppTheme.primary),
               SizedBox(width: 8),
               Text(
                 'Add Mechanic',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
@@ -393,7 +394,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                 TextField(
                   controller: usernameCtrl,
                   decoration: const InputDecoration(labelText: 'Username'),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
@@ -410,33 +411,33 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                           setDlgState(() => showPassword = !showPassword),
                     ),
                   ),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
                   controller: firstNameCtrl,
                   decoration: const InputDecoration(labelText: 'First Name'),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
                   controller: lastNameCtrl,
                   decoration: const InputDecoration(labelText: 'Last Name'),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
                   controller: phoneCtrl,
                   decoration: const InputDecoration(labelText: 'Phone'),
                   keyboardType: TextInputType.phone,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
                   controller: emailCtrl,
                   decoration: const InputDecoration(labelText: 'Email'),
                   keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
@@ -444,7 +445,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Specialization',
                   ),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
@@ -453,7 +454,7 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                     labelText: 'Experience (years)',
                   ),
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
               ],
             ),
@@ -461,9 +462,9 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
+              child: Text(
                 'Cancel',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textMuted,
                   fontWeight: FontWeight.bold,
                 ),
@@ -513,10 +514,10 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                     Navigator.pop(context);
                     _loadMechanics();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         content: Text(
                           'Mechanic added!',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
                         ),
                         backgroundColor: AppTheme.success,
                         behavior: SnackBarBehavior.floating,
@@ -535,9 +536,9 @@ class _OwnerMechanicsScreenState extends State<OwnerMechanicsScreen> {
                   }
                 }
               },
-              child: const Text(
+              child: Text(
                 'Add',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
               ),
             ),
           ],

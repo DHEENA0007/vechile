@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
@@ -40,9 +41,9 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'My Service Centers',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w800, letterSpacing: -0.5),
         ),
         backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
         elevation: 0,
@@ -74,9 +75,9 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           icon: const Icon(Icons.add_rounded, color: AppTheme.textPrimary),
-          label: const Text(
+          label: Text(
             'Add Center',
-            style: TextStyle(
+            style: GoogleFonts.outfit(
               color: AppTheme.textPrimary,
               fontWeight: FontWeight.bold,
             ),
@@ -129,18 +130,18 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                           curve: Curves.easeOutBack,
                         ),
                         const SizedBox(height: 24),
-                        const Text(
+                        Text(
                           'No Service Centers',
-                          style: TextStyle(
+                          style: GoogleFonts.outfit(
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                             color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
+                        Text(
                           'Create your first service center',
-                          style: TextStyle(
+                          style: GoogleFonts.outfit(
                             color: AppTheme.textMuted,
                             fontSize: 15,
                           ),
@@ -212,7 +213,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                   children: [
                     Text(
                       center['name'] ?? '',
-                      style: const TextStyle(
+                      style: GoogleFonts.outfit(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
                         color: AppTheme.textPrimary,
@@ -227,7 +228,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                         ),
                         Text(
                           ' (${center['total_reviews'] ?? 0})',
-                          style: const TextStyle(
+                          style: GoogleFonts.outfit(
                             color: AppTheme.textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -260,7 +261,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                 ),
                 child: Text(
                   center['is_active'] == true ? 'Active' : 'Inactive',
-                  style: TextStyle(
+                  style: GoogleFonts.outfit(
                     color: center['is_active'] == true
                         ? AppTheme.success
                         : AppTheme.error,
@@ -338,7 +339,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
       ),
       child: Text(
         label,
-        style: TextStyle(
+        style: GoogleFonts.outfit(
           color: color,
           fontSize: 12,
           fontWeight: FontWeight.w700,
@@ -362,7 +363,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
+            style: GoogleFonts.outfit(
               color: AppTheme.textSecondary,
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -395,7 +396,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
             const SizedBox(width: 6),
             Text(
               label,
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: color,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -429,13 +430,13 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
           ),
-          title: const Row(
+          title: Row(
             children: [
               Icon(Icons.add_business_rounded, color: AppTheme.primary),
               SizedBox(width: 8),
               Text(
                 'Create Center',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
@@ -479,8 +480,8 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Opens At', style: TextStyle(color: AppTheme.textMuted, fontSize: 10)),
-                              Text(openingTime.format(ctx), style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
+                              Text('Opens At', style: GoogleFonts.outfit(color: AppTheme.textMuted, fontSize: 10)),
+                              Text(openingTime.format(ctx), style: GoogleFonts.outfit(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -505,8 +506,8 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Closes At', style: TextStyle(color: AppTheme.textMuted, fontSize: 10)),
-                              Text(closingTime.format(ctx), style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
+                              Text('Closes At', style: GoogleFonts.outfit(color: AppTheme.textMuted, fontSize: 10)),
+                              Text(closingTime.format(ctx), style: GoogleFonts.outfit(color: AppTheme.textPrimary, fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -520,7 +521,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textMuted, fontWeight: FontWeight.bold)),
+              child: Text('Cancel', style: GoogleFonts.outfit(color: AppTheme.textMuted, fontWeight: FontWeight.bold)),
             ),
             FilledButton(
               style: FilledButton.styleFrom(
@@ -567,7 +568,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                     Navigator.pop(context);
                     _loadCenters();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Center created!', style: TextStyle(fontWeight: FontWeight.bold)), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
+                      SnackBar(content: Text('Center created!', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating),
                     );
                   }
                 } catch (e) {
@@ -578,7 +579,7 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
                   }
                 }
               },
-              child: const Text('Create', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text('Create', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -624,10 +625,10 @@ class _OwnerCenterScreenState extends State<OwnerCenterScreen> {
         controller: ctrl,
         maxLines: maxLines,
         keyboardType: keyboard,
-        style: const TextStyle(color: AppTheme.textPrimary),
+        style: GoogleFonts.outfit(color: AppTheme.textPrimary),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(color: AppTheme.textMuted),
+          labelStyle: GoogleFonts.outfit(color: AppTheme.textMuted),
           filled: true,
           fillColor: AppTheme.bgCardLight.withValues(alpha: 0.3),
           border: OutlineInputBorder(
@@ -719,10 +720,10 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
               children: [
                 const Icon(Icons.build_rounded, color: AppTheme.accent),
                 const SizedBox(width: 10),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Manage Services',
-                    style: TextStyle(
+                    style: GoogleFonts.outfit(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                       color: AppTheme.textPrimary,
@@ -765,9 +766,9 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                           color: AppTheme.accent.withValues(alpha: 0.3),
                         ),
                         const SizedBox(height: 12),
-                        const Text(
+                        Text(
                           'No services added',
-                          style: TextStyle(
+                          style: GoogleFonts.outfit(
                             color: AppTheme.textMuted,
                             fontWeight: FontWeight.bold,
                           ),
@@ -778,9 +779,9 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                             Icons.add_rounded,
                             color: AppTheme.accent,
                           ),
-                          label: const Text(
+                          label: Text(
                             'Add Service',
-                            style: TextStyle(
+                            style: GoogleFonts.outfit(
                               color: AppTheme.accent,
                               fontWeight: FontWeight.bold,
                             ),
@@ -829,7 +830,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
               children: [
                 Text(
                   service['service_type_name'] ?? '',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     color: AppTheme.textPrimary,
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
@@ -840,7 +841,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                   children: [
                     Text(
                       '₹${service['price'] ?? '0'}',
-                      style: const TextStyle(
+                      style: GoogleFonts.outfit(
                         color: AppTheme.accent,
                         fontWeight: FontWeight.w900,
                         fontSize: 16,
@@ -849,7 +850,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                     const SizedBox(width: 12),
                     Text(
                       '${service['estimated_duration'] ?? 0} min',
-                      style: const TextStyle(
+                      style: GoogleFonts.outfit(
                         color: AppTheme.textMuted,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -872,7 +873,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
             ),
             child: Text(
               service['is_available'] == true ? 'Active' : 'Off',
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: service['is_available'] == true
                     ? AppTheme.success
                     : AppTheme.error,
@@ -916,10 +917,10 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
 
     if (availableTypes.isEmpty && _serviceTypes.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
             'All available service types have been added',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
           ),
           backgroundColor: AppTheme.info,
           behavior: SnackBarBehavior.floating,
@@ -937,13 +938,13 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
           ),
-          title: const Row(
+          title: Row(
             children: [
               Icon(Icons.add_rounded, color: AppTheme.accent),
               SizedBox(width: 8),
               Text(
                 'Add Service',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
@@ -972,7 +973,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                           value: t['id']?.toString() ?? '',
                           child: Text(
                             t['name'] ?? '',
-                            style: const TextStyle(color: AppTheme.textPrimary),
+                            style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                           ),
                         ),
                       )
@@ -983,7 +984,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                 TextField(
                   controller: priceCtrl,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                   onChanged: (_) => setDlgState(() {}),
                   decoration: InputDecoration(
                     labelText: 'Price (₹)',
@@ -999,7 +1000,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                 TextField(
                   controller: durationCtrl,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                   decoration: InputDecoration(
                     labelText: 'Duration (minutes)',
                     filled: true,
@@ -1014,7 +1015,7 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                 TextField(
                   controller: descCtrl,
                   maxLines: 2,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                   decoration: InputDecoration(
                     labelText: 'Description (optional)',
                     filled: true,
@@ -1031,9 +1032,9 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text(
+              child: Text(
                 'Cancel',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textMuted,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1050,10 +1051,10 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
               onPressed: () async {
                 if (selectedTypeId == null || priceCtrl.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text(
                         'Please select a service type and enter price',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
                       ),
                       backgroundColor: AppTheme.warning,
                       behavior: SnackBarBehavior.floating,
@@ -1077,10 +1078,10 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                   widget.onChanged();
                   if (mounted)
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         content: Text(
                           'Service added!',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
                         ),
                         backgroundColor: AppTheme.success,
                         behavior: SnackBarBehavior.floating,
@@ -1097,9 +1098,9 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
                     );
                 }
               },
-              child: const Text(
+              child: Text(
                 'Add',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -1114,23 +1115,23 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
       builder: (_) => AlertDialog(
         backgroundColor: AppTheme.bgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
+        title: Text(
           'Remove Service?',
-          style: TextStyle(
+          style: GoogleFonts.outfit(
             color: AppTheme.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: const Text(
+        content: Text(
           'This will remove this service from your center.',
-          style: TextStyle(color: AppTheme.textSecondary),
+          style: GoogleFonts.outfit(color: AppTheme.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(color: AppTheme.textMuted),
+              style: GoogleFonts.outfit(color: AppTheme.textMuted),
             ),
           ),
           FilledButton(
@@ -1148,10 +1149,10 @@ class _ServiceManagementSheetState extends State<_ServiceManagementSheet> {
         widget.onChanged();
         if (mounted)
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
                 'Service removed',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
               ),
               backgroundColor: AppTheme.success,
               behavior: SnackBarBehavior.floating,
@@ -1240,10 +1241,10 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
               children: [
                 const Icon(Icons.schedule_rounded, color: AppTheme.info),
                 const SizedBox(width: 10),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Manage Time Slots',
-                    style: TextStyle(
+                    style: GoogleFonts.outfit(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                       color: AppTheme.textPrimary,
@@ -1284,9 +1285,9 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                           color: AppTheme.info.withValues(alpha: 0.3),
                         ),
                         const SizedBox(height: 12),
-                        const Text(
+                        Text(
                           'No time slots configured',
-                          style: TextStyle(
+                          style: GoogleFonts.outfit(
                             color: AppTheme.textMuted,
                             fontWeight: FontWeight.bold,
                           ),
@@ -1297,9 +1298,9 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                             Icons.add_rounded,
                             color: AppTheme.info,
                           ),
-                          label: const Text(
+                          label: Text(
                             'Add Time Slot',
-                            style: TextStyle(
+                            style: GoogleFonts.outfit(
                               color: AppTheme.info,
                               fontWeight: FontWeight.bold,
                             ),
@@ -1350,7 +1351,7 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
               children: [
                 Text(
                   '$start - $end',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     color: AppTheme.textPrimary,
                     fontWeight: FontWeight.w800,
                     fontSize: 16,
@@ -1359,7 +1360,7 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                 const SizedBox(height: 4),
                 Text(
                   'Max ${slot['max_bookings'] ?? 3} bookings',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     color: AppTheme.textMuted,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -1380,7 +1381,7 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
             ),
             child: Text(
               slot['is_active'] == true ? 'Active' : 'Off',
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: slot['is_active'] == true
                     ? AppTheme.success
                     : AppTheme.error,
@@ -1424,13 +1425,13 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
           ),
-          title: const Row(
+          title: Row(
             children: [
               Icon(Icons.schedule_rounded, color: AppTheme.info),
               SizedBox(width: 8),
               Text(
                 'Add Time Slot',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1463,13 +1464,13 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                         size: 20,
                       ),
                       const SizedBox(width: 10),
-                      const Text(
+                      Text(
                         'Start: ',
-                        style: TextStyle(color: AppTheme.textMuted),
+                        style: GoogleFonts.outfit(color: AppTheme.textMuted),
                       ),
                       Text(
                         startTime.format(ctx),
-                        style: const TextStyle(
+                        style: GoogleFonts.outfit(
                           color: AppTheme.textPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -1503,13 +1504,13 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                         size: 20,
                       ),
                       const SizedBox(width: 10),
-                      const Text(
+                      Text(
                         'End:   ',
-                        style: TextStyle(color: AppTheme.textMuted),
+                        style: GoogleFonts.outfit(color: AppTheme.textMuted),
                       ),
                       Text(
                         endTime.format(ctx),
-                        style: const TextStyle(
+                        style: GoogleFonts.outfit(
                           color: AppTheme.textPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -1523,7 +1524,7 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
               TextField(
                 controller: maxCtrl,
                 keyboardType: TextInputType.number,
-                style: const TextStyle(color: AppTheme.textPrimary),
+                style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 decoration: InputDecoration(
                   labelText: 'Max bookings per slot',
                   filled: true,
@@ -1539,9 +1540,9 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text(
+              child: Text(
                 'Cancel',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textMuted,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1588,10 +1589,10 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                   widget.onChanged();
                   if (mounted)
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         content: Text(
                           'Time slot added!',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
                         ),
                         backgroundColor: AppTheme.success,
                         behavior: SnackBarBehavior.floating,
@@ -1608,9 +1609,9 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
                     );
                 }
               },
-              child: const Text(
+              child: Text(
                 'Add',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -1625,23 +1626,23 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
       builder: (_) => AlertDialog(
         backgroundColor: AppTheme.bgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
+        title: Text(
           'Remove Time Slot?',
-          style: TextStyle(
+          style: GoogleFonts.outfit(
             color: AppTheme.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: const Text(
+        content: Text(
           'This will remove this time slot.',
-          style: TextStyle(color: AppTheme.textSecondary),
+          style: GoogleFonts.outfit(color: AppTheme.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(color: AppTheme.textMuted),
+              style: GoogleFonts.outfit(color: AppTheme.textMuted),
             ),
           ),
           FilledButton(
@@ -1659,10 +1660,10 @@ class _TimeSlotManagementSheetState extends State<_TimeSlotManagementSheet> {
         widget.onChanged();
         if (mounted)
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
                 'Time slot removed',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
               ),
               backgroundColor: AppTheme.success,
               behavior: SnackBarBehavior.floating,

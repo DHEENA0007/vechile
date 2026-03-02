@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OwnerRevenueScreen extends StatefulWidget {
   const OwnerRevenueScreen({super.key});
@@ -40,9 +41,9 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Revenue Report',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w800, letterSpacing: -0.5),
         ),
         backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
         elevation: 0,
@@ -129,9 +130,9 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              const Text(
+                              Text(
                                 'Service-wise Revenue',
-                                style: TextStyle(
+                                style: GoogleFonts.outfit(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w800,
                                   color: AppTheme.textPrimary,
@@ -145,10 +146,10 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                               true)
                             GlassCard(
                               padding: const EdgeInsets.all(32),
-                              child: const Center(
+                              child: Center(
                                 child: Text(
                                   'No revenue data yet',
-                                  style: TextStyle(
+                                  style: GoogleFonts.outfit(
                                     color: AppTheme.textMuted,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -194,7 +195,7 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                                 children: [
                                                   Text(
                                                     item['service'] ?? '',
-                                                    style: const TextStyle(
+                                                    style: GoogleFonts.outfit(
                                                       fontWeight:
                                                           FontWeight.w800,
                                                       color:
@@ -205,7 +206,7 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                                   const SizedBox(height: 2),
                                                   Text(
                                                     item['center'] ?? '',
-                                                    style: const TextStyle(
+                                                    style: GoogleFonts.outfit(
                                                       color: AppTheme.textMuted,
                                                       fontSize: 12,
                                                       fontWeight:
@@ -217,11 +218,11 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                             ),
                                             Text(
                                               '₹${item['revenue'] ?? '0'}',
-                                              style: const TextStyle(
+                                              style: GoogleFonts.outfit(
                                                 color: AppTheme.accent,
                                                 fontWeight: FontWeight.w900,
                                                 fontSize: 18,
-                                                shadows: [
+                                                shadows: const [
                                                   Shadow(
                                                     color: AppTheme.accent,
                                                     blurRadius: 8,
@@ -250,9 +251,9 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              const Text(
+                              Text(
                                 'Mechanic Productivity',
-                                style: TextStyle(
+                                style: GoogleFonts.outfit(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w800,
                                   color: AppTheme.textPrimary,
@@ -267,10 +268,10 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                               true)
                             GlassCard(
                               padding: const EdgeInsets.all(32),
-                              child: const Center(
+                              child: Center(
                                 child: Text(
                                   'No mechanic data',
-                                  style: TextStyle(
+                                  style: GoogleFonts.outfit(
                                     color: AppTheme.textMuted,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -308,7 +309,7 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                                 child: Text(
                                                   (mech['name'] ?? 'M')[0]
                                                       .toUpperCase(),
-                                                  style: const TextStyle(
+                                                  style: GoogleFonts.outfit(
                                                     color: AppTheme.primary,
                                                     fontWeight: FontWeight.w900,
                                                   ),
@@ -319,7 +320,7 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                             Expanded(
                                               child: Text(
                                                 mech['name'] ?? '',
-                                                style: const TextStyle(
+                                                style: GoogleFonts.outfit(
                                                   fontWeight: FontWeight.w800,
                                                   color: AppTheme.textPrimary,
                                                   fontSize: 15,
@@ -348,7 +349,7 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                                     const SizedBox(width: 6),
                                                     Text(
                                                       '${mech['completed_jobs'] ?? 0} done',
-                                                      style: const TextStyle(
+                                                      style: GoogleFonts.outfit(
                                                         color: AppTheme.success,
                                                         fontSize: 12,
                                                         fontWeight:
@@ -376,7 +377,7 @@ class _OwnerRevenueScreenState extends State<OwnerRevenueScreen> {
                                                     const SizedBox(width: 6),
                                                     Text(
                                                       '${mech['active_jobs'] ?? 0} active',
-                                                      style: const TextStyle(
+                                                      style: GoogleFonts.outfit(
                                                         color: AppTheme.warning,
                                                         fontSize: 12,
                                                         fontWeight:

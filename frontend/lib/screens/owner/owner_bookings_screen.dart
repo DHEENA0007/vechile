@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OwnerBookingsScreen extends StatefulWidget {
   const OwnerBookingsScreen({super.key});
@@ -44,9 +45,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Booking Management',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w800, letterSpacing: -0.5),
         ),
         backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
         elevation: 0,
@@ -124,18 +125,18 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                                 ),
                               ),
                               const SizedBox(height: 20),
-                              const Text(
+                              Text(
                                 'No Bookings',
-                                style: TextStyle(
+                                style: GoogleFonts.outfit(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: AppTheme.textPrimary,
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              const Text(
+                              Text(
                                 'Bookings will appear here',
-                                style: TextStyle(color: AppTheme.textMuted),
+                                style: GoogleFonts.outfit(color: AppTheme.textMuted),
                               ),
                             ],
                           ).animate().fadeIn(),
@@ -204,7 +205,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           ),
           child: Text(
             label,
-            style: TextStyle(
+            style: GoogleFonts.outfit(
               color: isSelected ? AppTheme.textPrimary : AppTheme.textMuted,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               fontSize: 13,
@@ -236,7 +237,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                 ),
                 child: Text(
                   booking['booking_number'] ?? '',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     fontWeight: FontWeight.w900,
                     color: AppTheme.primary,
                     fontSize: 14,
@@ -256,7 +257,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                 Expanded(
                   child: Text(
                     booking['service_center_name'],
-                    style: const TextStyle(
+                    style: GoogleFonts.outfit(
                       color: AppTheme.textPrimary,
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
@@ -314,7 +315,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
+            style: GoogleFonts.outfit(
               color: AppTheme.textSecondary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -385,9 +386,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
       }
     } else if (status == 'inspection_done') {
       actions.add(
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-          child: Text('Waiting for user approval...', style: TextStyle(color: AppTheme.warning, fontWeight: FontWeight.bold, fontSize: 13)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+          child: Text('Waiting for user approval...', style: GoogleFonts.outfit(color: AppTheme.warning, fontWeight: FontWeight.bold, fontSize: 13)),
         ),
       );
     } else if (status == 'estimate_approved') {
@@ -401,9 +402,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
       );
     } else if (status == 'estimate_rejected') {
       actions.add(
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-          child: Text('User rejected estimate.', style: TextStyle(color: AppTheme.error, fontWeight: FontWeight.bold, fontSize: 13)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+          child: Text('User rejected estimate.', style: GoogleFonts.outfit(color: AppTheme.error, fontWeight: FontWeight.bold, fontSize: 13)),
         ),
       );
     } else if (status == 'in_progress') {
@@ -467,7 +468,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
             const SizedBox(width: 6),
             Text(
               label,
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: color,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -491,7 +492,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           SnackBar(
             content: Text(
               'Booking $action successful',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
             ),
             backgroundColor: AppTheme.success,
             behavior: SnackBarBehavior.floating,
@@ -546,13 +547,13 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
         ),
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.engineering_rounded, color: AppTheme.primary),
             SizedBox(width: 8),
             Text(
               'Assign Mechanic',
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: AppTheme.textPrimary,
                 fontWeight: FontWeight.bold,
               ),
@@ -560,9 +561,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           ],
         ),
         content: centerMechanics.isEmpty 
-          ? const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('No mechanics found for this service center.', style: TextStyle(color: AppTheme.textMuted)),
+          ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text('No mechanics found for this service center.', style: GoogleFonts.outfit(color: AppTheme.textMuted)),
             )
           : Column(
               mainAxisSize: MainAxisSize.min,
@@ -584,14 +585,14 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                     ),
                     title: Text(
                       m['user_details']?['full_name'] ?? '',
-                      style: const TextStyle(
+                      style: GoogleFonts.outfit(
                         color: AppTheme.textPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     subtitle: Text(
                       '${m['specialization'] ?? ''} • ${m['active_jobs'] ?? 0} active jobs',
-                      style: const TextStyle(
+                      style: GoogleFonts.outfit(
                         color: AppTheme.textMuted,
                         fontSize: 12,
                       ),
@@ -641,13 +642,13 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
           ),
-          title: const Row(
+          title: Row(
             children: [
               Icon(Icons.search_rounded, color: AppTheme.warning),
               SizedBox(width: 8),
               Text(
                 'Inspection & Estimate',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -664,7 +665,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                   maxLines: 3,
                   decoration: InputDecoration(
                     hintText: 'Enter general inspection notes...',
-                    hintStyle: const TextStyle(color: AppTheme.textMuted),
+                    hintStyle: GoogleFonts.outfit(color: AppTheme.textMuted),
                     filled: true,
                     fillColor: AppTheme.bgCardLight.withValues(alpha: 0.3),
                     border: OutlineInputBorder(
@@ -672,12 +673,12 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 16),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Estimate Items', style: TextStyle(color: AppTheme.warning, fontWeight: FontWeight.bold)),
+                  child: Text('Estimate Items', style: GoogleFonts.outfit(color: AppTheme.warning, fontWeight: FontWeight.bold)),
                 ),
                 const SizedBox(height: 8),
                 ...estimateItems.asMap().entries.map(
@@ -694,12 +695,12 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                         Expanded(
                           child: Text(
                             e.value['description'],
-                            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13),
+                            style: GoogleFonts.outfit(color: AppTheme.textPrimary, fontSize: 13),
                           ),
                         ),
                         Text(
                           '₹${e.value['unit_price']} (${e.value['item_type'].toUpperCase()})',
-                          style: const TextStyle(color: AppTheme.accent, fontWeight: FontWeight.bold, fontSize: 12),
+                          style: GoogleFonts.outfit(color: AppTheme.accent, fontWeight: FontWeight.bold, fontSize: 12),
                         ),
                       ],
                     ),
@@ -715,7 +716,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
                   dropdownColor: AppTheme.bgCard,
-                  items: ['service', 'parts', 'labor', 'other'].map((t) => DropdownMenuItem(value: t, child: Text(t.toUpperCase(), style: const TextStyle(color: AppTheme.textPrimary)))).toList(),
+                  items: ['service', 'parts', 'labor', 'other'].map((t) => DropdownMenuItem(value: t, child: Text(t.toUpperCase(), style: GoogleFonts.outfit(color: AppTheme.textPrimary)))).toList(),
                   onChanged: (v) => setDialogState(() => itemType = v!),
                 ),
                 const SizedBox(height: 8),
@@ -727,7 +728,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                     fillColor: AppTheme.bgCardLight.withValues(alpha: 0.2),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
@@ -739,12 +740,12 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextButton.icon(
                   icon: const Icon(Icons.add_rounded, color: AppTheme.warning),
-                  label: const Text('Add Estimate Item', style: TextStyle(color: AppTheme.warning, fontWeight: FontWeight.bold)),
+                  label: Text('Add Estimate Item', style: GoogleFonts.outfit(color: AppTheme.warning, fontWeight: FontWeight.bold)),
                   onPressed: () {
                     if (descCtrl.text.isNotEmpty && priceCtrl.text.isNotEmpty) {
                       setDialogState(() {
@@ -766,7 +767,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textMuted, fontWeight: FontWeight.bold)),
+              child: Text('Cancel', style: GoogleFonts.outfit(color: AppTheme.textMuted, fontWeight: FontWeight.bold)),
             ),
             FilledButton(
               style: FilledButton.styleFrom(backgroundColor: AppTheme.warning, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
@@ -812,7 +813,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                   }
                 }
               },
-              child: const Text('Submit Estimate', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text('Submit Estimate', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -848,10 +849,10 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           children: [
             const Icon(Icons.receipt_long_rounded, color: AppTheme.accent),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
                 'Create Invoice',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
@@ -864,8 +865,8 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                   color: AppTheme.success.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Text('AUTO-FILLED',
-                    style: TextStyle(
+                child: Text('AUTO-FILLED',
+                    style: GoogleFonts.outfit(
                         color: AppTheme.success,
                         fontSize: 10,
                         fontWeight: FontWeight.bold)),
@@ -893,7 +894,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                           Expanded(
                             child: Text(
                               e.value['description'],
-                              style: const TextStyle(
+                              style: GoogleFonts.outfit(
                                 color: AppTheme.textPrimary,
                                 fontSize: 14,
                               ),
@@ -901,7 +902,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                           ),
                           Text(
                             '₹${e.value['unit_price']}',
-                            style: const TextStyle(
+                            style: GoogleFonts.outfit(
                               color: AppTheme.accent,
                               fontWeight: FontWeight.bold,
                             ),
@@ -916,9 +917,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: AppTheme.textMuted,
                 fontWeight: FontWeight.bold,
               ),
@@ -944,10 +945,10 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                       _loadBookings();
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text(
                               'Invoice created!',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
                             ),
                             backgroundColor: AppTheme.success,
                             behavior: SnackBarBehavior.floating,
@@ -966,9 +967,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                       }
                     }
                   },
-            child: const Text(
+            child: Text(
               'Finalize & Create Invoice',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
             ),
           ),
         ],

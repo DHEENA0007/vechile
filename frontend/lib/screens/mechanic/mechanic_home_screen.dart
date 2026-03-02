@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
@@ -23,12 +24,22 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   static const _mechColor = Color(0xFFFF6B35);
   static const _mechColorDark = Color(0xFFD32F2F);
 
+  late PageController _pageController;
+
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     _loadDashboard();
     _loadJobs();
   }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
 
   Future<void> _loadDashboard() async {
     try {
@@ -49,113 +60,86 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     } catch (_) {}
   }
 
+  void _onNavTapped(int index) {
+    setState(() => _currentIndex = index);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOutExpo,
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      backgroundColor: AppTheme.bgDark,
       body: Stack(
         children: [
-          // Background glow
+          // Dynamic mesh background
           Positioned(
-            top: -100,
+            top: -150,
             left: -100,
+            child: Container(
+              width: 400,
+              height: 400,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _mechColor.withValues(alpha: 0.15),
+                boxShadow: [
+                  BoxShadow(
+                    color: _mechColorDark.withValues(alpha: 0.1),
+                    blurRadius: 120,
+                  ),
+                ],
+              ),
+            ),
+          ).animate().fadeIn(duration: 1000.ms).scale(begin: const Offset(0.8, 0.8), curve: Curves.easeOut),
+          
+          Positioned(
+            bottom: -50,
+            right: -100,
             child: Container(
               width: 300,
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _mechColor.withValues(alpha: 0.12),
+                color: AppTheme.warning.withValues(alpha: 0.1),
                 boxShadow: [
                   BoxShadow(
-                    color: _mechColor.withValues(alpha: 0.1),
+                    color: AppTheme.warning.withValues(alpha: 0.1),
                     blurRadius: 100,
                   ),
                 ],
               ),
             ),
-          ).animate().fadeIn(duration: 800.ms),
-          _currentIndex == 0 ? _buildDashboard() : _buildJobList(),
+          ).animate().fadeIn(duration: 1000.ms),
+
+          // Main Pages
+          PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              _buildDashboard(),
+              _buildJobList(),
+            ],
+          ),
         ],
       ),
-      bottomNavigationBar:
-          Container(
-            margin: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  blurRadius: 30,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppTheme.bgSurface.withValues(alpha: 0.8),
-                    border: Border.all(
-                      color: AppTheme.textPrimary.withValues(alpha: 0.05),
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: BottomNavigationBar(
-                    currentIndex: _currentIndex,
-                    onTap: (i) => setState(() => _currentIndex = i),
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    selectedItemColor: _mechColor,
-                    unselectedItemColor: AppTheme.textMuted,
-                    showUnselectedLabels: false,
-                    type: BottomNavigationBarType.fixed,
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: const Icon(Icons.dashboard_rounded, size: 24),
-                        activeIcon: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: _mechColor.withValues(alpha: 0.15),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.dashboard_rounded,
-                            size: 26,
-                            color: _mechColor,
-                          ),
-                        ),
-                        label: 'Dashboard',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: const Icon(Icons.work_rounded, size: 24),
-                        activeIcon: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: _mechColor.withValues(alpha: 0.15),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.work_rounded,
-                            size: 26,
-                            color: _mechColor,
-                          ),
-                        ),
-                        label: 'All Jobs',
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ).animate().slideY(
-            begin: 1.0,
-            duration: 800.ms,
-            curve: Curves.easeOutExpo,
-          ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: _onNavTapped,
+        backgroundColor: AppTheme.bgCard,
+        indicatorColor: _mechColor.withValues(alpha: 0.2),
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.engineering_rounded), label: 'Dashboard'),
+          NavigationDestination(icon: Icon(Icons.build_rounded), label: 'All Jobs'),
+        ],
+      ),
     );
   }
+
 
   Widget _buildDashboard() {
     final auth = context.watch<AuthProvider>();
@@ -193,7 +177,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       children: [
                         Text(
                               'Hi, ${auth.fullName}! 🔧',
-                              style: const TextStyle(
+                              style: GoogleFonts.outfit(
                                 fontSize: 26,
                                 fontWeight: FontWeight.w900,
                                 color: AppTheme.textPrimary,
@@ -204,9 +188,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                             .fadeIn(duration: 500.ms)
                             .slideX(begin: -0.1),
                         const SizedBox(height: 6),
-                        const Text(
+                        Text(
                           'Ready to fix some vehicles?',
-                          style: TextStyle(
+                          style: GoogleFonts.outfit(
                             color: AppTheme.textSecondary,
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -320,9 +304,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            const Text(
+                            Text(
                               "Today's Tasks",
-                              style: TextStyle(
+                              style: GoogleFonts.outfit(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w800,
                                 color: AppTheme.textPrimary,
@@ -350,18 +334,18 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 16),
-                                const Text(
+                                Text(
                                   'No Tasks Today',
-                                  style: TextStyle(
+                                  style: GoogleFonts.outfit(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: AppTheme.textPrimary,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                const Text(
+                                Text(
                                   'Enjoy your free time!',
-                                  style: TextStyle(color: AppTheme.textMuted),
+                                  style: GoogleFonts.outfit(color: AppTheme.textMuted),
                                 ),
                               ],
                             ).animate().fadeIn(delay: 600.ms),
@@ -391,9 +375,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'All Jobs',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: -0.5),
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w800, letterSpacing: -0.5),
         ),
         backgroundColor: AppTheme.bgDark.withValues(alpha: 0.8),
         elevation: 0,
@@ -424,18 +408,18 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       'No Jobs',
-                      style: TextStyle(
+                      style: GoogleFonts.outfit(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: AppTheme.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Your assigned jobs will appear here',
-                      style: TextStyle(color: AppTheme.textMuted),
+                      style: GoogleFonts.outfit(color: AppTheme.textMuted),
                     ),
                   ],
                 ).animate().fadeIn(),
@@ -480,7 +464,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 ),
                 child: Text(
                   job['booking_number'] ?? '',
-                  style: const TextStyle(
+                  style: GoogleFonts.outfit(
                     fontWeight: FontWeight.w900,
                     color: _mechColor,
                     fontSize: 14,
@@ -539,7 +523,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
+            style: GoogleFonts.outfit(
               color: AppTheme.textSecondary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -616,7 +600,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
             const SizedBox(width: 8),
             Text(
               label,
-              style: const TextStyle(
+              style: GoogleFonts.outfit(
                 color: AppTheme.textPrimary,
                 fontWeight: FontWeight.w800,
                 fontSize: 13,
@@ -642,10 +626,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       _loadJobs();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
               'Status updated!',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
             ),
             backgroundColor: AppTheme.success,
             behavior: SnackBarBehavior.floating,
@@ -681,13 +665,13 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
           ),
-          title: const Row(
+          title: Row(
             children: [
               Icon(Icons.search_rounded, color: AppTheme.warning),
               SizedBox(width: 8),
               Text(
                 'Inspection & Estimate',
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -704,7 +688,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   maxLines: 3,
                   decoration: InputDecoration(
                     hintText: 'Enter general inspection notes...',
-                    hintStyle: const TextStyle(color: AppTheme.textMuted),
+                    hintStyle: GoogleFonts.outfit(color: AppTheme.textMuted),
                     filled: true,
                     fillColor: AppTheme.bgCardLight.withValues(alpha: 0.3),
                     border: OutlineInputBorder(
@@ -712,12 +696,12 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 16),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Estimate Items', style: TextStyle(color: AppTheme.warning, fontWeight: FontWeight.bold)),
+                  child: Text('Estimate Items', style: GoogleFonts.outfit(color: AppTheme.warning, fontWeight: FontWeight.bold)),
                 ),
                 const SizedBox(height: 8),
                 ...estimateItems.asMap().entries.map(
@@ -734,12 +718,12 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                         Expanded(
                           child: Text(
                             e.value['description'],
-                            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13),
+                            style: GoogleFonts.outfit(color: AppTheme.textPrimary, fontSize: 13),
                           ),
                         ),
                         Text(
                           '₹${e.value['unit_price']} (${e.value['item_type'].toUpperCase()})',
-                          style: const TextStyle(color: AppTheme.accent, fontWeight: FontWeight.bold, fontSize: 12),
+                          style: GoogleFonts.outfit(color: AppTheme.accent, fontWeight: FontWeight.bold, fontSize: 12),
                         ),
                       ],
                     ),
@@ -755,7 +739,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
                   dropdownColor: AppTheme.bgCard,
-                  items: ['service', 'parts', 'labor', 'other'].map((t) => DropdownMenuItem(value: t, child: Text(t.toUpperCase(), style: const TextStyle(color: AppTheme.textPrimary)))).toList(),
+                  items: ['service', 'parts', 'labor', 'other'].map((t) => DropdownMenuItem(value: t, child: Text(t.toUpperCase(), style: GoogleFonts.outfit(color: AppTheme.textPrimary)))).toList(),
                   onChanged: (v) => setDialogState(() => itemType = v!),
                 ),
                 const SizedBox(height: 8),
@@ -767,7 +751,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                     fillColor: AppTheme.bgCardLight.withValues(alpha: 0.2),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextField(
@@ -779,12 +763,12 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppTheme.textPrimary),
+                  style: GoogleFonts.outfit(color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 TextButton.icon(
                   icon: const Icon(Icons.add_rounded, color: AppTheme.warning),
-                  label: const Text('Add Estimate Item', style: TextStyle(color: AppTheme.warning, fontWeight: FontWeight.bold)),
+                  label: Text('Add Estimate Item', style: GoogleFonts.outfit(color: AppTheme.warning, fontWeight: FontWeight.bold)),
                   onPressed: () {
                     if (descCtrl.text.isNotEmpty && priceCtrl.text.isNotEmpty) {
                       setDialogState(() {
@@ -806,7 +790,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textMuted, fontWeight: FontWeight.bold)),
+              child: Text('Cancel', style: GoogleFonts.outfit(color: AppTheme.textMuted, fontWeight: FontWeight.bold)),
             ),
             FilledButton(
               style: FilledButton.styleFrom(backgroundColor: AppTheme.warning, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
@@ -846,7 +830,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   _loadDashboard();
                   _loadJobs();
                   if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Inspection Done!', style: TextStyle(fontWeight: FontWeight.bold)), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Inspection Done!', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)), backgroundColor: AppTheme.success, behavior: SnackBarBehavior.floating));
                   }
                 } catch (e) {
                   if (mounted) {
@@ -854,7 +838,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   }
                 }
               },
-              child: const Text('Submit Estimate', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text('Submit Estimate', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -872,13 +856,13 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(color: AppTheme.textMuted.withValues(alpha: 0.15)),
         ),
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.check_circle_rounded, color: AppTheme.success),
             SizedBox(width: 8),
             Text(
               'Complete Service',
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: AppTheme.textPrimary,
                 fontWeight: FontWeight.bold,
               ),
@@ -888,9 +872,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'Add any final remarks about the service.',
-              style: TextStyle(color: AppTheme.textSecondary),
+              style: GoogleFonts.outfit(color: AppTheme.textSecondary),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -898,7 +882,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
               maxLines: 4,
               decoration: InputDecoration(
                 hintText: 'Final remarks...',
-                hintStyle: const TextStyle(color: AppTheme.textMuted),
+                hintStyle: GoogleFonts.outfit(color: AppTheme.textMuted),
                 filled: true,
                 fillColor: AppTheme.bgCardLight.withValues(alpha: 0.3),
                 border: OutlineInputBorder(
@@ -906,16 +890,16 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   borderSide: BorderSide.none,
                 ),
               ),
-              style: const TextStyle(color: AppTheme.textPrimary),
+              style: GoogleFonts.outfit(color: AppTheme.textPrimary),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(
+              style: GoogleFonts.outfit(
                 color: AppTheme.textMuted,
                 fontWeight: FontWeight.bold,
               ),
@@ -933,9 +917,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
               Navigator.pop(context);
               _updateStatus(jobId, 'completed', notes: notesCtrl.text);
             },
-            child: const Text(
+            child: Text(
               'Complete',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -989,9 +973,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Text(
+                    Text(
                       'Notifications',
-                      style: TextStyle(
+                      style: GoogleFonts.outfit(
                         fontSize: 22,
                         fontWeight: FontWeight.w900,
                         color: AppTheme.textPrimary,
@@ -1012,17 +996,17 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                               color: AppTheme.textMuted.withValues(alpha: 0.15),
                             ),
                             const SizedBox(height: 16),
-                            const Text(
+                            Text(
                               'Caught up!',
-                              style: TextStyle(
-                                color: AppTheme.textPrimary,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                style: GoogleFonts.outfit(
+                                  color: AppTheme.textPrimary,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                             ),
-                            const Text(
+                            Text(
                               'No new notifications',
-                              style: TextStyle(color: AppTheme.textMuted),
+                              style: GoogleFonts.outfit(color: AppTheme.textMuted),
                             ),
                           ],
                         ),
@@ -1055,7 +1039,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                                     children: [
                                       Text(
                                         n['title'] ?? '',
-                                        style: TextStyle(
+                                        style: GoogleFonts.outfit(
                                           color: n['is_read']
                                               ? AppTheme.textSecondary
                                               : AppTheme.textPrimary,
@@ -1068,7 +1052,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                                       const SizedBox(height: 4),
                                       Text(
                                         n['message'] ?? '',
-                                        style: const TextStyle(
+                                        style: GoogleFonts.outfit(
                                           color: AppTheme.textMuted,
                                           fontSize: 13,
                                           height: 1.4,
